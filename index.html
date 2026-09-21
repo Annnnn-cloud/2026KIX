@@ -652,10 +652,15 @@
       <div class="attraction-section">
         <div class="attraction-day">Day 6（11/02）返回大阪</div>
         <div class="parking-section">
-          <div class="parking-title">🅿️ 比叡山延曆寺</div>
-          <div class="parking-main">寺院停車場</div>
-          <div class="parking-item">• 比叡山延曆寺停車場：<strong>無料</strong>（免費停車場約可容納 270 至 350 輛車）</div>
-          <div class="parking-item">⚠️ <strong>重要提醒：</strong>雖然寺院停車場本身免費，但自駕前往必須行駛收費的觀光道路「比叡山Driveway」或「奧比叡Driveway」，需另外支付通行費（約 ¥2,300 起）。</div>
+          <div class="parking-title">🅿️ 比叡山延曆寺 三區域停車場</div>
+          <div class="parking-main">橫川地區（北）</div>
+          <div class="parking-item">• 比叡山延曆寺 橫川停車場：<strong>無料</strong>（50～60台）⭐ 距橫川中堂最近</div>
+          <div class="parking-main" style="margin-top:8px;">西塔地區（中）</div>
+          <div class="parking-item">• 比叡山延曆寺 西塔停車場：<strong>無料</strong>（80～100台）⭐ 距釋迦堂最近</div>
+          <div class="parking-main" style="margin-top:8px;">東塔地區（南）</div>
+          <div class="parking-item">• 比叡山延曆寺 東塔停車場：<strong>無料</strong>（150～200台）⭐ 距根本中堂最近</div>
+          <div class="parking-item" style="margin-top:8px;">⚠️ <strong>重要提醒：</strong>寺院停車場本身免費，但自駕前往必須行駛收費觀光道路「比叡山Driveway」或「奧比叡Driveway」，需另外支付通行費（約 ¥2,300～2,800）。</div>
+          <div class="parking-item">💡 <strong>推薦路線：</strong>由北向南遊覽（橫川→西塔→東塔）或反向遊覽。</div>
         </div>
         <div class="parking-section">
           <div class="parking-title">🅿️ 大阪城</div>
@@ -734,6 +739,9 @@ const LOCATION_COORDS = {
   '還車': [34.6460, 135.5252],
   '天王寺駅': [34.6468, 135.5207],
   '比叡山延曆寺': [35.0706, 135.8407],
+  '比叡山延曆寺 橫川地區': [35.1000, 135.8280],
+  '比叡山延曆寺 西塔地區': [35.0800, 135.8400],
+  '比叡山延曆寺 東塔地區': [35.0500, 135.8550],
   '夢見が丘展望台': [35.0385, 135.8456],
   '大阪城': [34.6872, 135.5262],
   '大阪城公園 JO-TERRACE': [34.6888, 135.5342],
@@ -759,6 +767,10 @@ const PARKING_MAP = {
   '白鬚神社': '白鬚神社駐車場',
   '浮御堂': '満月寺駐車場',
   '比叡山延曆寺': '延暦寺駐車場',
+  '比叡山延曆寺 橫川地區': '比叡山延曆寺 橫川停車場',
+  '比叡山延曆寺 西塔地區': '比叡山延曆寺 西塔停車場',
+  '比叡山延曆寺 東塔地區': '比叡山延曆寺 東塔停車場',
+  'Price Cut Ise-Futami store': 'Price Cut Ise-Futami 停車場',
   '大阪城': '大阪城駐車場'
 };
 
@@ -787,21 +799,22 @@ function defaultData(){
         {id:cid(),time:'16:30',name:'プティットフィーユ',note:'買點心',tag:'',driveTime:'約 20 分鐘',done:false},
         {id:cid(),time:'17:00',name:'高見峠展望台',note:'山路休息點',tag:'',driveTime:'約 55 分鐘',done:false},
         {id:cid(),time:'18:30',name:'一升びん 宮町店',note:'松阪牛燒肉',tag:'餐廳',driveTime:'約 30 分鐘',done:false},
+        {id:cid(),time:'20:00',name:'Price Cut Ise-Futami store',note:'買明天早餐食材',tag:'',driveTime:'約 15 分鐘',done:false},
         {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住首夜）',tag:'住宿',driveTime:'',done:false},
       ]},
-      d3: {title:'伊勢・鳥羽', stops:[
-        {id:cid(),time:'08:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐~出發點',tag:'',driveTime:'約 5 分鐘',done:false},
-        {id:cid(),time:'08:30',name:'二見浦夫婦岩',note:'海邊散步',tag:'景點',driveTime:'步行 3 分鐘',done:false},
-        {id:cid(),time:'08:45',name:'二見興玉神社',note:'',tag:'景點',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'10:00',name:'伊勢神宮外宮',note:'參拜伊勢神宮的正式順序為：外宮正宮 → 外宮別宮 → 內宮正宮 → 內宮別宮。',tag:'景點',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'11:30',name:'伊勢神宮內宮',note:'',tag:'景點',driveTime:'步行 5 分鐘',done:false},
-        {id:cid(),time:'12:30',name:'托福橫丁',note:'午餐吃赤福與麵食',tag:'餐廳',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'14:30',name:'鳥羽水族館',note:'看海豚與儒艮',tag:'景點',driveTime:'約 20 分鐘',done:false},
+      d3: {title:'伊勢・日出・鳥羽', stops:[
+        {id:cid(),time:'05:30',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發 (日出時間約06:00-06:30)',tag:'',driveTime:'步行 3 分鐘',done:false},
+        {id:cid(),time:'05:45',name:'二見浦夫婦岩',note:'🌅 觀賞日出、拍照勝地、夫婦大國社參拜',tag:'景點',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'07:15',name:'二見興玉神社',note:'日出後參拜、靜心',tag:'景點',driveTime:'約 20 分鐘',done:false},        {id:cid(),time:'10:00',name:'伊勢神宮外宮',note:'參拜伊勢神宮的正式順序為：外宮正宮 → 外宮別宮 → 內宮正宮 → 內宮別宮。',tag:'景點',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'09:00',name:'伊勢神宮外宮',note:'⭐ 外宮參拜順序：外宮正宮→外宮別宮（多賀宮、土宮）→三つ石參觀',tag:'景點',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'10:30',name:'伊勢神宮內宮',note:'⭐ 內宮必逛：皇大神宮正宮→別宮（風日祈宮等）→瀧原宮(時間許可)。本殿要脫鞋參觀可選',tag:'景點',driveTime:'步行 5 分鐘',done:false},
+        {id:cid(),time:'12:00',name:'托福橫丁',note:'午餐赤福餅、伊勢烏龍麵、古街散步',tag:'餐廳',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'14:30',name:'鳥羽水族館',note:'看海豚、儒艮、日本僅存唯一海獺🦦',tag:'景點',driveTime:'約 20 分鐘',done:false},
         {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住飯店',tag:'住宿',driveTime:'',done:false},
       ]},
       d4: {title:'滋賀・近江八幡', stops:[
-        {id:cid(),time:'09:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐~出發點',tag:'',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'09:30',name:'COQUELICOT ROUGE',note:'特色麵包店',tag:'',driveTime:'約 90 分鐘',done:false},
+        {id:cid(),time:'08:30',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發',tag:'',driveTime:'約 90 分鐘',done:false},
+        {id:cid(),time:'10:00',name:'COQUELICOT ROUGE',note:'日本知名麵包連鎖，新鮮出爐麵包',tag:'',driveTime:'約 35 分鐘',done:false},
         {id:cid(),time:'11:00',name:'滋賀農業公園 Blumen之丘',note:'',tag:'景點',driveTime:'約 35 分鐘',done:false},
         {id:cid(),time:'13:00',name:'La Collina Ōmi-Hachiman',note:'童話年輪蛋糕甜點店',tag:'餐廳',driveTime:'約 5 分鐘',done:false},
         {id:cid(),time:'15:00',name:'日牟禮八幡宮',note:'',tag:'景點',driveTime:'約 40 分鐘',done:false},
@@ -815,9 +828,11 @@ function defaultData(){
         {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'返回飯店休息',tag:'住宿',driveTime:'',done:false},
       ]},
       d6: {title:'比叡山・返回大阪', stops:[
-        {id:cid(),time:'08:30',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發~',tag:'',driveTime:'約 45 分鐘',done:false},
-        {id:cid(),time:'10:00',name:'比叡山延曆寺',note:'世界文化遺產｜三塔巡禮，建議路線（由北往南）：橫川地區(必看:橫川中堂) → 西塔地區(必看:釋迦堂) → 東塔地區必看(必看:國寶「根本中堂」)，利用收費道路「比叡山車道（比叡山Driveway）」與「奧比叡車道（奧比叡ドライブウェイ）」由北向南或由南向北串聯三塔。',tag:'景點',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'12:30',name:'夢見が丘展望台',note:'鳥瞰琵琶湖景致',tag:'景點',driveTime:'約 55 分鐘',done:false},
+        {id:cid(),time:'08:30',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',driveTime:'約 30 分鐘',done:false},
+        {id:cid(),time:'09:00',name:'比叡山延曆寺 橫川地區',note:'⭐ 橫川中堂參拜（世界遺產、延曆寺北邊最古老建築）',tag:'景點',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'10:00',name:'比叡山延曆寺 西塔地區',note:'⭐ 釋迦堂、転法輪堂參拜（西塔重點）',tag:'景點',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'11:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓',tag:'景點',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'12:30',name:'夢見が丘展望台',note:'鳥瞰琵琶湖360°景致、午餐休息',tag:'景點',driveTime:'約 55 分鐘',done:false},
         {id:cid(),time:'15:00',name:'大阪城',note:'參觀天守閣',tag:'景點',driveTime:'步行 5 分鐘',done:false},
         {id:cid(),time:'17:30',name:'大阪城公園 JO-TERRACE',note:'晚餐購物',tag:'餐廳',driveTime:'約 15 分鐘',done:false},
         {id:cid(),time:'19:00',name:'還車（Orix 阿倍野店）',note:'預約20:00 可提早歸還',tag:'',driveTime:'',done:false},
@@ -907,6 +922,9 @@ function openGoogleNav(dayId, name){
     '一升びん 宮町店': '一升びん 宮町店',
     'COQUELICOT ROUGE': 'COQUELICOT ROUGE',
     '日牟禮八幡宮': '日牟禮八幡宮前免費停車場, 257 Miyauchicho, Omihachiman, Shiga 523-0828'
+    '比叡山延曆寺 橫川地區': '比叡山延曆寺 橫川停車場',
+    '比叡山延曆寺 西塔地區': '比叡山延曆寺 西塔停車場',
+    '比叡山延曆寺 東塔地區': '比叡山延曆寺 東塔停車場'
   };
   
   // Locations that don't need parking navigation
