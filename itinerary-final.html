@@ -1,695 +1,524 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>～日本近畿之旅～ 親子自駕7日遊</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<style>
-  :root{
-    --bg:#EFF6F5;
-    --paper:#FFFFFF;
-    --ink:#23383B;
-    --ink-soft:#61797D;
-    --line:#D1E3E2;
-    --accent:#2B8A88;
-    --accent-hover:#226E6C;
-    --accent-soft:#D8EFEF;
-    --moss:#3C7A77;
-    --moss-soft:#DFF0EE;
-    --shadow: 0 2px 10px rgba(35,56,59,.05), 0 1px 3px rgba(35,56,59,.03);
-    --radius: 16px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{background:var(--bg);color:var(--ink);font-family:'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;padding-bottom:56px;}
-  .wrap{max-width:640px;margin:0 auto;padding:14px 14px 0;}
-  .topbar{display:flex;align-items:center;justify-space:between;gap:10px;padding:2px 2px 12px;}
-  .title{font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:18px;letter-spacing:.02em;}
-  .topbar-btns{display:flex;gap:6px;}
-  .iconbtn-top{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);font-size:16px;box-shadow:var(--shadow);transition:all .15s ease;}
-  .iconbtn-top:active{transform:scale(.95);}
-  .tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none;}
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab{flex:none;min-width:58px;padding:8px 6px;border-radius:12px;background:var(--paper);border:1px solid var(--line);text-align:center;cursor:pointer;transition:all .15s ease;}
-  .tab:active{transform:scale(.96);}
-  .tab .wd{font-size:11px;color:var(--ink-soft);}
-  .tab .num{font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:17px;line-height:1.15;}
-  .tab.selected{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
-  .tab.today{background:var(--accent);border-color:var(--accent);}
-  .tab.today .wd,.tab.today .num{color:#fff;}
-  .backtoday{display:none;align-items:center;gap:6px;color:var(--accent);font-size:13px;font-weight:700;padding:0 2px 12px;cursor:pointer;}
-  .backtoday.show{display:flex;}
-  .dayhead{display:flex;align-items:center;justify-space:between;padding:2px 2px 12px;}
-  .dayhead h1{font-family:'Zen Maru Gothic',sans-serif;font-size:19px;margin:0;font-weight:700;}
-  .dayhead .progress{font-size:12.5px;color:var(--ink-soft);font-weight:500;}
-  
-  /* 地圖容器 */
-  .daymap{width:100%;height:220px;border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--line);background:#e5e3df;position:relative;z-index:1;}
-  
-  /* 行程卡片與時間軸優化 */
-  .timeline{position:relative;padding-left:2px;}
-  .stop-wrapper{position:relative;}
-  .stop{position:relative;display:flex;gap:12px;padding:0 2px 12px;}
-  .railcol{width:22px;flex:none;display:flex;flex-direction:column;align-items:center;}
-  .railcol .node{width:22px;height:22px;border-radius:50%;background:var(--paper);border:2px solid var(--ink-soft);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;color:var(--ink-soft);margin-top:2px;}
-  .railcol .line{flex:1;width:2px;background:var(--line);margin-top:2px;min-height:20px;}
-  .stop.done .railcol .node{background:var(--moss);border-color:var(--moss);color:#fff;}
-  .stop.current .railcol .node{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft);}
-  
-  .card{flex:1;background:var(--paper);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow);border:1px solid rgba(209, 227, 226, 0.6);transition:all 0.2s ease;}
-  .stop.current .card{border-color:var(--accent);}
-  
-  .card-top{display:flex;align-items:flex-start;justify-space:between;gap:8px;}
-  .card-main{min-width:0;flex:1;}
-  
-  .time-tag-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
-  .time{font-size:12px;color:var(--accent);font-weight:700;font-family:'Zen Maru Gothic',sans-serif;}
-  .tag{display:inline-block;font-size:10.5px;padding:1px 8px;border-radius:100px;background:#E3F2F1;color:#1F6260;font-weight:700;}
-  .stop-duration{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;padding:2px 8px;border-radius:100px;background:#FFF3E0;color:#D97706;font-weight:700;margin-top:6px;}
-  
-  .name{font-size:15.5px;font-weight:700;line-height:1.35;word-break:break-word;color:var(--ink);}
-  .stop.done .name{color:var(--ink-soft);text-decoration:line-through;font-weight:500;}
-  .note{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.5;}
-  
-  /* 打勾與導航按鈕 */
-  .check-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;color:transparent;font-size:12px;flex:none;transition:all 0.15s ease;}
-  .stop.done .check-btn{background:var(--moss);color:#fff;border-color:var(--moss);}
-  .check-btn:active{transform:scale(.92);}
-
-  .card-footer{display:flex;align-items:center;justify-space:between;margin-top:10px;padding-top:8px;border-top:1px dashed #E8F0F0;}
-  .nav-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:10px;background:linear-gradient(135deg, #2B8A88, #237270);color:#ffffff;border:none;font-family:'Zen Maru Gothic', sans-serif;font-weight:700;font-size:12px;cursor:pointer;box-shadow:0 2px 6px rgba(43,138,136,0.25);transition:all .15s ease;margin-left:auto;}
-  .nav-btn:active{transform:scale(.95);box-shadow:none;}
-
-  .addbar{padding:10px 2px 30px;}
-  .addbtn{width:100%;padding:11px;border-radius:12px;border:1.5px dashed var(--line);background:transparent;color:var(--ink-soft);font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .addbtn:active{transform:scale(.99);}
-  
-  /* Modal 與莫蘭迪柔色調 */
-  .modal-bg{position:fixed;inset:0;background:rgba(35,56,59,.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;}
-  .modal{background:var(--paper);border-radius:20px;padding:22px;max-width:480px;width:100%;max-height:82vh;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,.15);position:relative;}
-  .modal-close{position:sticky;top:0;right:0;float:right;width:30px;height:30px;border-radius:50%;border:none;background:var(--accent-soft);color:var(--accent);cursor:pointer;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10000;margin:-6px -6px 10px 0;transition:all 0.15s ease;}
-  .modal-close:active{transform:scale(.9);}
-  .modal h2{font-family:'Zen Maru Gothic',sans-serif;font-size:18px;margin:0 0 16px;font-weight:700;color:var(--accent);clear:both;}
-  
-  .info-card{border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12.5px;line-height:1.75;border-left:4px solid var(--card-border, #2B8A88);box-shadow:0 1px 4px rgba(0,0,0,0.02);}
-  .info-card strong{color:var(--ink);font-weight:700;}
-
-  /* 莫蘭迪分天主題色 */
-  .theme-green{background:#F1F7F4; border-color:#529A78;}  /* Day 2: 鼠尾草綠 */
-  .theme-blue{background:#F0F5FA; border-color:#4A80B4;}   /* Day 3: 霧藍 */
-  .theme-orange{background:#FAF4EC; border-color:#E08A3C;} /* Day 4: 暖杏橘 */
-  .theme-purple{background:#F5F0F8; border-color:#8C62A9;} /* Day 5: 薰衣草紫 */
-  .theme-teal{background:#EEF6F6; border-color:#3B9795;}   /* Day 6: 蒂芬妮綠 */
-  .theme-pink{background:#FBF0F3; border-color:#D4688A;}   /* 通用 / 提醒：乾燥玫瑰粉 */
-
-  .hotel-info{background:linear-gradient(135deg, #EBF5F4, #F4F9F9);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;border-left:4px solid var(--moss);box-shadow:var(--shadow);}
-  .hotel-name{font-weight:700;color:var(--moss);cursor:pointer;text-decoration:underline;}
-  .footnote{max-width:640px;margin:0 auto;padding:0 16px 24px;font-size:11.5px;color:var(--ink-soft);line-height:1.6;text-align:center;}
-  
-  .insurance-reminder{background:linear-gradient(135deg, #FFF6E9, #FFEED8);border-radius:12px;padding:10px 14px;border:1px solid #FCD3A1;border-left:4px solid #E08A3C;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:#784816;box-shadow:var(--shadow);}
-  .insurance-reminder .icon{font-size:18px;}
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="title">～日本近畿之旅～ 親子自駕7日遊</div>
-      <div class="topbar-btns">
-        <button class="iconbtn-top" id="resetBtn" title="恢復預設行程">🔄</button>
-        <button class="iconbtn-top" id="medicalBtn" title="醫療應急">🏥</button>
-        <button class="iconbtn-top" id="flightBtn" title="航班資訊">✈️</button>
-        <button class="iconbtn-top" id="infoBtn" title="景點資訊">ℹ️</button>
-        <button class="iconbtn-top" id="parkingBtn" title="停車資訊">🅿️</button>
-      </div>
-    </div>
-    <div class="tabs" id="tabs"></div>
-    <div class="backtoday" id="backToday">← 回到今天</div>
-    <div class="dayhead">
-      <h1 id="dayTitle"></h1>
-      <div class="progress" id="dayProgress"></div>
-    </div>
-    <div id="hotelDisplay"></div>
-    <div id="insuranceReminder"></div>
-    <div class="daymap" id="daymap"></div>
-    <div class="timeline" id="timeline"></div>
-    <div class="addbar"><button class="addbtn" id="addBtn">＋ 新增地點</button></div>
-  </div>
-  <div class="footnote">資料自動存在瀏覽器中。點擊「🗺️ 地圖導航」開啟 Google Maps。⏱️ 顯示預計停留時間。</div>
-
-  <!-- Flight Modal -->
-  <div id="flightModal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('flightModal').style.display='none'">✕</button>
-      <h2>✈️ 航班資訊</h2>
-      <div style="font-size:12.5px;line-height:1.8;color:var(--ink-soft);">
-        <div class="info-card theme-blue">
-          <div><strong>🛫 去程：IT 212</strong></div>
-          <div>日期：2026年10月28日（三）</div>
-          <div>出發：14:40（台北桃園國際機場 T1）</div>
-          <div>抵達：17:55（大阪關西國際機場 T1）</div>
-          <div>航班時間：約 3.5 小時 | 機型：空巴 A321</div>
-          <div style="margin-top:6px;padding:6px 10px;background:#FFFFFF;border-radius:6px;color:#2B6CB0;font-weight:500;">💡 建議提前 3 小時抵達機場（12:40）</div>
-        </div>
-        <div class="info-card theme-purple">
-          <div><strong>🛬 回程：IT 211</strong></div>
-          <div>日期：2026年11月3日（二）</div>
-          <div>出發：11:30（大阪關西國際機場 T1）</div>
-          <div>抵達：13:50（台北桃園國際機場 T1）</div>
-          <div>航班時間：約 3.5 小時 | 機型：空巴 A321</div>
-          <div style="margin-top:6px;padding:6px 10px;background:#FFFFFF;border-radius:6px;color:#6B46C1;font-weight:500;">💡 Day 7 建議 07:00 起床，08:00 搭 HARUKA 前往機場</div>
-        </div>
-        <div class="info-card theme-green">
-          <div><strong>✈️ 機上備忘</strong></div>
-          <div>• 填寫入境卡 / 海關申報書</div>
-          <div>• 兒童（4歲）需要自己的護照及入境卡</div>
-          <div>• 嬰兒食品、奶粉可隨身攜帶</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Info Modal（莫蘭迪配色） -->
-  <div id="infoModal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('infoModal').style.display='none'">✕</button>
-      <h2>ℹ️ 景點營業資訊</h2>
-      <div style="font-size:12.5px;color:var(--ink-soft);">
-        <!-- Day 2: 綠色調 -->
-        <div class="info-card theme-green">
-          <div><strong>Day 2 - 談山神社</strong></div>
-          <div>⏰ 08:30-17:00 | 💴 大人¥600 / 小學以下免費</div>
-          <div>📍 停留 90 分鐘 | 💡 階梯多，建議帶手推車</div>
-        </div>
-        <div class="info-card theme-green">
-          <div><strong>Day 2 - 春日大社</strong></div>
-          <div>⏰ 06:30-17:30 | 💴 大人¥600 / 小學以下免費</div>
-          <div>📍 拍照重點：朱紅色樓門 | 💡 登山步道 30 分鐘</div>
-        </div>
-        
-        <!-- Day 3: 藍色調 -->
-        <div class="info-card theme-blue">
-          <div><strong>Day 3 - 伊勢神宮（外宮 & 內宮）</strong></div>
-          <div>⏰ 05:00-18:00 | 💴 入場免費</div>
-          <div style="margin-top:4px;padding:6px 8px;background:#FFFFFF;border-radius:6px;color:#2B6CB0;">⭐ <strong>參拜順序</strong>：外宮正宮 → 外宮別宮 → 內宮正宮 → 內宮別宮</div>
-          <div>💡 距離：外宮 ↔ 內宮 約 1.5 公里 | 約 40 分鐘車程</div>
-        </div>
-        <div class="info-card theme-blue">
-          <div><strong>Day 3 - おかげ横丁</strong></div>
-          <div>⏰ 09:30-17:00（依店家而異） | 💴 昼食約 ¥2,000-3,000</div>
-          <div>📍 伊勢神宮內宮前參道街 | 💡 紅豆麵包、伊勢烏龍麵必吃</div>
-        </div>
-        <div class="info-card theme-blue">
-          <div><strong>Day 3 - 鳥羽水族館</strong></div>
-          <div>⏰ 09:00-17:00 | 💴 大人 ¥3,300 / 4 歲 ¥2,100</div>
-          <div>🅿️ 停車場：¥600/天（購票扣 ¥100） | ⭐ 館內有用餐區及哺乳室</div>
-        </div>
-
-        <!-- Day 4: 橘色調 -->
-        <div class="info-card theme-orange">
-          <div><strong>Day 4 - 伊勢海洋樂園</strong></div>
-          <div>⏰ 09:30-17:00 | 💴 大人 ¥2,100 / 4 歲 ¥1,300</div>
-          <div>🎪 內容：水上滑梯、親子泳池、戶外設施 | 約 2 小時</div>
-          <div>💡 備妥游泳衣、毛巾；停車免費</div>
-        </div>
-        <div class="info-card theme-orange">
-          <div><strong>Day 4 - La Collina Ōmi-Hachiman</strong></div>
-          <div>⏰ 10:00-19:00 | 💴 商業設施・免費參觀</div>
-          <div>🏛️ 草山建築・義式風商城 | 🛍️ 名牌 Outlet 約 75 分鐘</div>
-        </div>
-        <div class="info-card theme-orange">
-          <div><strong>Day 4 - 日牟禮八幡宮 & 八幡堀</strong></div>
-          <div>⏰ 自由參觀（24h） | 💴 免費</div>
-          <div>📍 老街散步 | 💡 拍照景點：水路反射、町家</div>
-        </div>
-
-        <!-- Day 5: 紫色調 -->
-        <div class="info-card theme-purple">
-          <div><strong>Day 5 - 白鬚神社</strong></div>
-          <div>⏰ 08:00-17:00 | 💴 入場免費</div>
-          <div>📸 亮點：琵琶湖內紅色鳥居（湖中參道） | 日出最美</div>
-        </div>
-        <div class="info-card theme-purple">
-          <div><strong>Day 5 - メタセコイア & Metasequoia Avenue</strong></div>
-          <div>⏰ 自由參觀 | 💴 免費</div>
-          <div>🌲 秋日紅葉景點 | 🚗 開車穿過樹林隧道（約 2.4km）| 📸 網美景點</div>
-        </div>
-        <div class="info-card theme-purple">
-          <div><strong>Day 5 - Biwako Valley Ropeway</strong></div>
-          <div>⏰ 09:00-17:00 | 💴 往返 ¥2,600 / 4 歲 ¥1,300</div>
-          <div>🌤️ <strong style="color:#8C62A9;">依天氣決定</strong>（有 Livecam 可預先查看）| 山頂 360° 琵琶湖全景</div>
-        </div>
-        <div class="info-card theme-purple">
-          <div><strong>Day 5 - PIERI MORIYAMA（ピエリ守山）</strong></div>
-          <div>⏰ 10:00-20:00 | 💴 購物廣場・免費</div>
-          <div>🛍️ 大型 Shopping Mall、美食街、遊樂區 | 晚餐好地點</div>
-        </div>
-
-        <!-- Day 6: 蒂芬妮綠色調 -->
-        <div class="info-card theme-teal">
-          <div><strong>Day 6 - 比叡山延曆寺</strong></div>
-          <div>⏰ 08:30-16:00（冬季 -17:00） | 💴 大人 ¥1,000 / 小學生 ¥500</div>
-          <div>📍 三區路線：橫川 → 西塔 → 東塔 | 🚙 往返通行費 ¥2,300-2,800</div>
-          <div>💡 穿舒適登山鞋、注意停車空間</div>
-        </div>
-        <div class="info-card theme-teal">
-          <div><strong>Day 6 - 浮御堂（滿月寺）</strong></div>
-          <div>⏰ 08:30-16:00 | 💴 大人 ¥600 / 小學生 ¥300</div>
-          <div>📸 琵琶湖畔最美寺院 | 💡 回程前必訪</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Medical Emergency Modal -->
-  <div id="medicalModal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('medicalModal').style.display='none'">✕</button>
-      <h2>🏥 醫療應急資訊</h2>
-      <div style="font-size:12.5px;color:var(--ink-soft);">
-        <div class="info-card theme-orange">
-          <div><strong>🛡️ 日本旅遊保險 - 東京海上日動</strong></div>
-          <div>官方網站：<a href="https://tokiomarinenichido.jp/zh-hant/china2/" target="_blank" style="color:#2B8A88;font-weight:700;">中文頁面</a></div>
-          <div>📞 緊急：+81 3 6758 2444</div>
-          <div>💡 建議：落地第一天立即投保（涵蓋全程）</div>
-        </div>
-        <div class="info-card theme-orange">
-          <div><strong>🇹🇼 駐大阪經濟文化辦事處</strong></div>
-          <div>地址：大阪市北區淀屋橋1-1-8 日光淀屋橋大樓9樓</div>
-          <div>📞 一般領務：+81-6-6202-7591</div>
-          <div>🚨 急難救助：+81-90-6278-5556（24hr）</div>
-        </div>
-        <div class="info-card theme-orange">
-          <div><strong>🚗 Orix 租車中文客服</strong></div>
-          <div>📞 Beborn 翻譯電話：+81-92-285-9603</div>
-          <div>💡 租車確認項目：JAF 駕照譯本、兒童座椅、ETC 卡</div>
-        </div>
-        <div class="info-card theme-orange">
-          <div><strong>🏥 常用日文 / 緊急電話</strong></div>
-          <div>119 - 救護車 | 110 - 警察 | 1129 - 中毒/中暑諮詢</div>
-          <div>病院 (byouin) = 醫院 | 藥局 (yakkyoku) = 藥局</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Parking Modal（莫蘭迪配色） -->
-  <div id="parkingModal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('parkingModal').style.display='none'">✕</button>
-      <h2>🅿️ 停車資訊 & 加油提醒</h2>
-      <div style="font-size:12.5px;color:var(--ink-soft);">
-        <!-- Day 2: 綠色調 -->
-        <div class="info-card theme-green">
-          <div><strong>Day 2 - 奈良景點停車</strong></div>
-          <div>• 春日大社駐車場：¥500-600/次</div>
-          <div>• GU 橿原店：無料停車（商城停車場）</div>
-          <div>• 談山神社：¥500/台</div>
-        </div>
-
-        <!-- Day 3: 藍色調 -->
-        <div class="info-card theme-blue">
-          <div><strong>Day 3 - 伊勢神宮與鳥羽停車</strong></div>
-          <div>🅿️ <strong>伊勢神宮：</strong></div>
-          <div style="margin-left:12px;">• 外宮停車場：¥500/1小時</div>
-          <div style="margin-left:12px;">• 內宮停車場：¥500/1小時（約 500 台）</div>
-          <div>🅿️ <strong>おかげ横丁：</strong>¥500/1小時</div>
-          <div>🅿️ <strong>鳥羽水族館停車場：</strong>¥600/天（購票折抵 ¥100）</div>
-          <div>🅿️ <strong>イオンタウン：</strong>無料停車</div>
-        </div>
-
-        <!-- Day 4: 橘色調 -->
-        <div class="info-card theme-orange">
-          <div><strong>Day 4 - 近江八幡與伊勢海洋樂園停車</strong></div>
-          <div>🅿️ <strong>伊勢海洋樂園：</strong>無料停車</div>
-          <div>🅿️ <strong>La Collina Ōmi-Hachiman：</strong>無料停車</div>
-          <div>🅿️ <strong>日牟禮八幡宮：</strong>無料停車</div>
-        </div>
-
-        <!-- Day 5: 紫色調 -->
-        <div class="info-card theme-purple">
-          <div><strong>Day 5 - 琵琶湖周邊停車</strong></div>
-          <div>🅿️ <strong>白鬚神社：</strong>無料停車</div>
-          <div>🅿️ <strong>メタセコイア Avenue：</strong>無料停車</div>
-          <div>🅿️ <strong>Biwako Valley Ropeway：</strong>¥700（山麓駐車場）</div>
-          <div>🅿️ <strong>PIERI MORIYAMA：</strong>無料停車（2,000 台以上）</div>
-          <div>🅿️ <strong>Lake Biwa Marriott Hotel：</strong>無料停車（住宿客）</div>
-        </div>
-
-        <!-- Day 6: 蒂芬妮綠色調 -->
-        <div class="info-card theme-teal">
-          <div><strong>Day 6 - 比叡山延曆寺停車</strong></div>
-          <div>⚠️ <strong style="color:#D97706;">通行費：比叡山 Driveway ¥2,300-2,800（往返）</strong></div>
-          <div>🅿️ <strong>橫川 / 西塔 / 東塔停車場：</strong>皆為無料停車</div>
-        </div>
-
-        <!-- 提醒：粉色調 -->
-        <div class="info-card theme-pink">
-          <div><strong>⛽ 加油提醒</strong></div>
-          <div>• Day 2 傍晚 / Day 4 上午 優先加油</div>
-          <div>• 高速公路 SA/PA 設有 24 小時加油站</div>
-          <div>• 距 Orix 還車點 30km 內務必加滿油</div>
-          <div style="margin-top:6px;padding:6px;background:#FFFFFF;border-radius:6px;color:#D4688A;">💡 一般加油站營業時間約 08:00-21:00</div>
-        </div>
-
-        <div class="info-card theme-pink">
-          <div><strong>🚗 通勤時間提醒</strong></div>
-          <div>• Orix 阿倍野 → 奈良（春日大社）：1 小時</div>
-          <div>• 奈良 → 伊勢（Hotel Castle Inn）：2.5 小時</div>
-          <div>• 伊勢 → 琵琶湖（Lake Biwa Marriott）：1.5 小時</div>
-          <div>• 琵琶湖 → Orix 還車：1.5 小時</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hotel Modal -->
-  <div id="hotelModal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('hotelModal').style.display='none'">✕</button>
-      <h2 id="hotelModalTitle"></h2>
-      <div id="hotelModalContent" style="font-size:12.5px;line-height:1.8;"></div>
-    </div>
-  </div>
-
-<script>
-const DATA_VERSION = 'v3.2';
-
-const DAY_META = [
-  {id:'d1', date:'2026-10-28', wd:'三', hotel:'Hotel Trusty 大阪阿倍野'},
-  {id:'d2', date:'2026-10-29', wd:'四', hotel:'Hotel Castle Inn Ise Meotoiwa'},
-  {id:'d3', date:'2026-10-30', wd:'五', hotel:'Hotel Castle Inn Ise Meotoiwa'},
-  {id:'d4', date:'2026-10-31', wd:'六', hotel:'Lake Biwa Marriott Hotel'},
-  {id:'d5', date:'2026-11-01', wd:'日', hotel:'Lake Biwa Marriott Hotel'},
-  {id:'d6', date:'2026-11-02', wd:'一', hotel:'Miyako City Osaka Tennoji'},
-  {id:'d7', date:'2026-11-03', wd:'二', hotel:''},
-];
-
-const HOTELS = {
-  'Hotel Trusty 大阪阿倍野': {address: '大阪府大阪市阿倍野区阿倍野筋1-1-43', phone: '06-6621-7111', checkin: '15:00', checkout: '11:00'},
-  'Hotel Castle Inn Ise Meotoiwa': {address: '三重県伊勢市二見町江580-1', phone: '0596-43-2111', checkin: '15:00', checkout: '11:00'},
-  'Lake Biwa Marriott Hotel': {address: '滋賀県守山市今浜町十町観音435-6', phone: '077-585-6100', checkin: '15:00', checkout: '11:00'},
-  'Miyako City Osaka Tennoji': {address: '大阪府大阪市天王寺区悲田院町10-45', phone: '06-6779-1501', checkin: '15:00', checkout: '11:00'}
-};
-
-let state = null;
-let selectedDay = null;
-let map = null;
-let markerGroup = null;
-
-function defaultData(){
-  return {
-    version: DATA_VERSION,
-    days: {
-      d1: {title:'抵達關西・天王寺 check-in 與逛街', stops:[
-        {id:cid(),time:'17:55',name:'關西機場',note:'入境+領行李',tag:'',stopTime:'約60分鐘',driveTime:'',done:false, lat:34.4320, lng:135.2304},
-        {id:cid(),time:'19:00',name:'HARUKA 前往天王寺',note:'JR特急HARUKA',tag:'交通',stopTime:'約60分鐘',driveTime:'',done:false, lat:34.6472, lng:135.5139},
-        {id:cid(),time:'20:00',name:'Hotel Trusty 大阪阿倍野',note:'Check-in 入住',tag:'住宿',stopTime:'約15分鐘',driveTime:'',done:false, lat:34.6461, lng:135.5133},
-        {id:cid(),time:'20:15',name:'Q\'s Mall',note:'逛街購物',tag:'購物',stopTime:'約45分鐘',driveTime:'步行 3 分鐘',done:false, lat:34.6449, lng:135.5126},
-        {id:cid(),time:'21:00',name:'龜王拉麵 天王寺店',note:'晚餐',tag:'餐廳',stopTime:'約45分鐘',driveTime:'步行 5 分鐘',done:false, lat:34.6480, lng:135.5135},
-      ]},
-      d2: {title:'奈良・伊勢 長距離自駕日', stops:[
-        {id:cid(),time:'08:30',name:'Orix 阿倍野店 取車',note:'確認安全座椅、ETC卡',tag:'',stopTime:'約20分鐘',driveTime:'',done:false, lat:34.6461, lng:135.5133},
-        {id:cid(),time:'09:45',name:'奈良春日大社',note:'看鹿參拜',tag:'景點',stopTime:'約60分鐘',driveTime:'約 50 分鐘',done:false, lat:34.6813, lng:135.8484},
-        {id:cid(),time:'11:30',name:'GU 橿原店',note:'逛衣服',tag:'購物',stopTime:'約40分鐘',driveTime:'約 20 分鐘',done:false, lat:34.5065, lng:135.7941},
-        {id:cid(),time:'12:30',name:'三輪素麵 やまなか',note:'特色午餐',tag:'餐廳',stopTime:'約45分鐘',driveTime:'約 25 分鐘',done:false, lat:34.5323, lng:135.8522},
-        {id:cid(),time:'13:45',name:'談山神社',note:'十三重塔著名景點',tag:'景點',stopTime:'約90分鐘',driveTime:'約 25 分鐘',done:false, lat:34.4658, lng:135.8624},
-        {id:cid(),time:'15:45',name:'プティットフィーユ',note:'焼菓子外帶',tag:'購物',stopTime:'約15分鐘',driveTime:'約 20 分鐘',done:false, lat:34.4920, lng:135.8900},
-        {id:cid(),time:'16:30',name:'高見峠展望台',note:'休息品嚐蛋糕',tag:'景點',stopTime:'約15分鐘',driveTime:'約 55 分鐘',done:false, lat:34.4172, lng:136.0825},
-        {id:cid(),time:'18:00',name:'一升びん 宮町店',note:'松阪牛燒肉',tag:'餐廳',stopTime:'約90分鐘',driveTime:'約 30 分鐘',done:false, lat:34.5824, lng:136.5361},
-        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住二晚）',tag:'住宿',driveTime:'',done:false, lat:34.5085, lng:136.7876},
-      ]},
-      d3: {title:'伊勢神宮・鳥羽 充實朝聖日', stops:[
-        {id:cid(),time:'06:00',name:'二見浦夫婦岩・二見興玉神社',note:'日出散步',tag:'景點',stopTime:'約45分鐘',driveTime:'',done:false, lat:34.5085, lng:136.7876},
-        {id:cid(),time:'07:30',name:'COQUELICOT ROUGE',note:'買麵包',tag:'',stopTime:'約20分鐘',driveTime:'約 15 分鐘',done:false, lat:34.4880, lng:136.7200},
-        {id:cid(),time:'08:15',name:'伊勢神宮・外宮',note:'外宮正宮→別宮參拜',tag:'景點',stopTime:'約90分鐘',driveTime:'約 20 分鐘',done:false, lat:34.4878, lng:136.7036},
-        {id:cid(),time:'10:00',name:'伊勢神宮・內宮',note:'內宮正宮→別宮群參拜',tag:'景點',stopTime:'約90分鐘',driveTime:'約 20 分鐘',done:false, lat:34.4550, lng:136.7258},
-        {id:cid(),time:'11:45',name:'おかげ横丁（托福橫丁）',note:'午餐赤福餅、逛街',tag:'餐廳',stopTime:'約90分鐘',driveTime:'約 15 分鐘',done:false, lat:34.4562, lng:136.7231},
-        {id:cid(),time:'13:15',name:'鳥羽水族館',note:'看儒艮、海獺、海豚',tag:'景點',stopTime:'約180分鐘',driveTime:'約 20 分鐘',done:false, lat:34.4828, lng:136.8453},
-        {id:cid(),time:'17:30',name:'イオンタウン伊勢ララパーク',note:'有體力才去',tag:'購物',stopTime:'約60~90分鐘',driveTime:'約 15 分鐘',done:false, lat:34.5005, lng:136.7240},
-        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住二晚）',tag:'住宿',driveTime:'',done:false, lat:34.5085, lng:136.7876},
-      ]},
-      d4: {title:'伊勢海洋樂園・近江八幡', stops:[
-        {id:cid(),time:'09:15',name:'Hotel Castle Inn Ise Meotoiwa',note:'飯店早餐出發',tag:'',stopTime:'',driveTime:'約 20 分鐘',done:false, lat:34.5085, lng:136.7876},
-        {id:cid(),time:'09:30',name:'伊勢海洋樂園',note:'海洋生物園區',tag:'景點',stopTime:'約120分鐘',driveTime:'約 60 分鐘',done:false, lat:34.5072, lng:136.7865},
-        {id:cid(),time:'12:30',name:'Birthday 津市店',note:'甜點午茶',tag:'餐廳',stopTime:'約45分鐘',driveTime:'約 50 分鐘',done:false, lat:34.7300, lng:136.5050},
-        {id:cid(),time:'14:45',name:'La Collina Ōmi-Hachiman',note:'年輪蛋糕名店',tag:'餐廳',stopTime:'約75分鐘',driveTime:'約 40 分鐘',done:false, lat:35.1528, lng:136.0964},
-        {id:cid(),time:'16:10',name:'日牟禮八幡宮・八幡堀',note:'古町參拜散步',tag:'景點',stopTime:'約60分鐘',driveTime:'約 30 分鐘',done:false, lat:35.1386, lng:136.0886},
-        {id:cid(),time:'',name:'Lake Biwa Marriott Hotel',note:'入住（連住二晚）',tag:'住宿',driveTime:'',done:false, lat:35.1205, lng:135.9482},
-      ]},
-      d5: {title:'琵琶湖・自然療癒日', stops:[
-        {id:cid(),time:'08:30',name:'Lake Biwa Marriott Hotel',note:'飯店早餐出發',tag:'',stopTime:'',driveTime:'約 20 分鐘',done:false, lat:35.1205, lng:135.9482},
-        {id:cid(),time:'09:00',name:'白鬚神社',note:'水上紅鳥居',tag:'景點',stopTime:'約30分鐘',driveTime:'約 25 分鐘',done:false, lat:35.2778, lng:136.0142},
-        {id:cid(),time:'10:20',name:'メタセコイアと馬の森',note:'馬匹樂園、落羽松樹林',tag:'景點',stopTime:'約70分鐘',driveTime:'約 20 分鐘',done:false, lat:35.4740, lng:136.0280},
-        {id:cid(),time:'11:30',name:'Metasequoia Avenue',note:'落羽松大道散步',tag:'景點',stopTime:'約30分鐘',driveTime:'約 5 分鐘',done:false, lat:35.4786, lng:136.0238},
-        {id:cid(),time:'12:00',name:'午餐',note:'在地用餐',tag:'餐廳',stopTime:'約60分鐘',driveTime:'',done:false, lat:35.4786, lng:136.0238},
-        {id:cid(),time:'14:00',name:'Biwako Valley Ropeway',note:'纜車賞琵琶湖全景',tag:'景點',stopTime:'約120分鐘',driveTime:'約 25 分鐘',done:false, lat:35.2078, lng:135.9242},
-        {id:cid(),time:'16:30',name:'PIERI MORIYAMA',note:'逛街+晚餐',tag:'購物',stopTime:'約150分鐘',driveTime:'約 30 分鐘',done:false, lat:35.1225, lng:135.9405},
-        {id:cid(),time:'',name:'Lake Biwa Marriott Hotel',note:'入住（連住二晚）',tag:'住宿',driveTime:'',done:false, lat:35.1205, lng:135.9482},
-      ]},
-      d6: {title:'比叡山・大阪城・返程', stops:[
-        {id:cid(),time:'08:30',name:'Lake Biwa Marriott Hotel',note:'飯店早餐出發',tag:'',stopTime:'',driveTime:'約 15 分鐘',done:false, lat:35.1205, lng:135.9482},
-        {id:cid(),time:'09:00',name:'御浮堂（滿月寺）',note:'湖中寺廟',tag:'景點',stopTime:'約30分鐘',driveTime:'約 20 分鐘',done:false, lat:35.1118, lng:135.9221},
-        {id:cid(),time:'10:10',name:'比叡山延曆寺・橫川地區',note:'橫川中堂參拜',tag:'景點',stopTime:'約50分鐘',driveTime:'約 30 分鐘',done:false, lat:35.0833, lng:135.8450},
-        {id:cid(),time:'11:15',name:'比叡山延曆寺・西塔地區',note:'釋迦堂參拜',tag:'景點',stopTime:'約45分鐘',driveTime:'約 15 分鐘',done:false, lat:35.0700, lng:135.8400},
-        {id:cid(),time:'12:10',name:'比叡山延曆寺・東塔地區',note:'根本中堂參拜+午餐',tag:'景點',stopTime:'約90分鐘',driveTime:'約 20 分鐘',done:false, lat:35.0645, lng:135.8406},
-        {id:cid(),time:'14:00',name:'夢見が丘展望台',note:'琵琶湖360°全景',tag:'景點',stopTime:'約30分鐘',driveTime:'約 55 分鐘',done:false, lat:35.0450, lng:135.8350},
-        {id:cid(),time:'15:30',name:'Orix 阿倍野店 還車',note:'預約20:00可提早',tag:'',stopTime:'約20分鐘',driveTime:'步行 5 分鐘',done:false, lat:34.6461, lng:135.5133},
-        {id:cid(),time:'',name:'Miyako City Osaka Tennoji',note:'Check-in 入住',tag:'住宿',driveTime:'',done:false, lat:34.6475, lng:135.5145},
-      ]},
-      d7: {title:'返程', stops:[
-        {id:cid(),time:'07:00',name:'起床・早餐',note:'',tag:'',stopTime:'約60分鐘',driveTime:'步行 3 分鐘',done:false, lat:34.6475, lng:135.5145},
-        {id:cid(),time:'08:00',name:'天王寺駅',note:'搭HARUKA前往機場',tag:'交通',stopTime:'',driveTime:'',done:false, lat:34.6472, lng:135.5139},
-        {id:cid(),time:'08:20',name:'HARUKA 前往關西機場',note:'JR特急',tag:'交通',stopTime:'約50分鐘',driveTime:'',done:false, lat:34.6472, lng:135.5139},
-        {id:cid(),time:'09:10',name:'關西機場',note:'辦理登機+安檢',tag:'',stopTime:'約120分鐘',driveTime:'',done:false, lat:34.4320, lng:135.2304},
-        {id:cid(),time:'11:30',name:'✈️ 起飛',note:'IT 211 返台',tag:'班機',stopTime:'',driveTime:'',done:false, lat:34.4320, lng:135.2304},
-      ]},
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本自駕親子7日遊 ｜ 導航與行程地圖</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root {
+      --primary-color: #1d3557;
+      --accent-color: #e63946;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-color: #2b2d42;
+      --border-color: #e9ecef;
     }
-  };
-}
 
-function cid(){return 'x'+Math.random().toString(36).slice(2,9);}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
 
-function init(){
-  loadFromLocal();
-  selectedDay = computeTodayId();
-  render();
-  
-  document.getElementById('resetBtn').onclick = resetToDefault;
-  document.getElementById('medicalBtn').onclick = ()=>document.getElementById('medicalModal').style.display='flex';
-  document.getElementById('flightBtn').onclick = ()=>document.getElementById('flightModal').style.display='flex';
-  document.getElementById('infoBtn').onclick = ()=>document.getElementById('infoModal').style.display='flex';
-  document.getElementById('parkingBtn').onclick = ()=>document.getElementById('parkingModal').style.display='flex';
-}
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
 
-function loadFromLocal(){
-  try{
-    const saved = localStorage.getItem('trip-state');
-    if(saved){
-      const parsed = JSON.parse(saved);
-      if(parsed && parsed.version === DATA_VERSION){
-        state = parsed;
-        return;
+    header {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+
+    /* 天數切換按鈕 */
+    .day-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin-bottom: 15px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .day-btn {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary-color);
+      transition: all 0.2s ease;
+    }
+
+    .day-btn.active, .day-btn:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+      border-color: var(--primary-color);
+    }
+
+    /* 地圖區域 */
+    #map {
+      height: 420px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    /* 數字標記樣式 */
+    .custom-numbered-marker {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* 資訊面板 */
+    .section-title {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      margin: 25px 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    .btn-nav {
+      display: inline-block;
+      background-color: #25d366;
+      color: #fff;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .btn-nav:hover {
+      background-color: #1eb854;
+    }
+
+    .tag-parking {
+      background-color: #e8f4fd;
+      color: #1e88e5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    .mapcode-badge {
+      background-color: #f1f3f5;
+      color: #495057;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    /* 醫療與資訊清單 */
+    .info-list {
+      list-style: none;
+    }
+
+    .info-list li {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .info-list li::before {
+      content: "•";
+      color: var(--accent-color);
+      font-weight: bold;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 0;
+      top: -2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eef2f7;
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 600px) {
+      #map {
+        height: 320px;
+      }
+      th, td {
+        padding: 6px;
+        font-size: 0.82rem;
       }
     }
-  }catch(e){}
-  state = defaultData();
-  saveToLocal();
-}
+  </style>
+</head>
+<body>
 
-function saveToLocal(){
-  try{
-    state.version = DATA_VERSION;
-    localStorage.setItem('trip-state', JSON.stringify(state));
-  }catch(e){}
-}
+  <header>
+    <h1>🚗 日本自駕親子7日遊行程導航</h1>
+    <p>關西 ➔ 奈良 ➔ 伊勢志摩 ➔ 琵琶湖 ｜ 停車場優先導航地圖</p>
+  </header>
 
-function resetToDefault(){
-  if(confirm('確定要將行程恢復預設？')){
-    localStorage.removeItem('trip-state');
-    state = defaultData();
-    saveToLocal();
-    render();
-  }
-}
+  <div class="container">
+    <!-- 天數切換頁籤 -->
+    <div class="day-nav">
+      <button class="day-btn active" onclick="switchDay('day1')">Day 1 抵達大阪</button>
+      <button class="day-btn" onclick="switchDay('day2')">Day 2 奈良/夫婦岩</button>
+      <button class="day-btn" onclick="switchDay('day3')">Day 3 鳥羽水族館</button>
+      <button class="day-btn" onclick="switchDay('day4')">Day 4 伊勢神宮/琵琶湖</button>
+      <button class="day-btn" onclick="switchDay('day5')">Day 5 近江八幡水鄉</button>
+      <button class="day-btn" onclick="switchDay('day6')">Day 6 白鬚神社/大津</button>
+      <button class="day-btn" onclick="switchDay('day7')">Day 7 臨空城/返台</button>
+    </div>
 
-function computeTodayId(){
-  const now = new Date();
-  const todayStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-  let idx = DAY_META.findIndex(d=>d.date === todayStr);
-  if(idx === -1){
-    if(todayStr < DAY_META[0].date) idx = 0;
-    else idx = DAY_META.length-1;
-  }
-  return DAY_META[idx].id;
-}
+    <!-- 互動地圖 -->
+    <div id="map"></div>
 
-function fmtDate(dateStr){
-  const [y,m,d] = dateStr.split('-');
-  return `${parseInt(m)}/${parseInt(d)}`;
-}
+    <!-- 當日行程細節面板 -->
+    <div id="day-info-panel"></div>
 
-function escapeHtml(str){
-  if(!str) return '';
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function openGoogleNav(name){
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
-  window.open(url, '_blank');
-}
-
-function render(){
-  renderTabs();
-  renderBackToday();
-  renderDay();
-}
-
-function renderTabs(){
-  const todayId = computeTodayId();
-  const tabs = document.getElementById('tabs');
-  tabs.innerHTML = DAY_META.map(d=>{
-    const isToday = d.id===todayId;
-    const isSel = d.id===selectedDay;
-    return `<div class="tab ${isToday?'today':''} ${isSel?'selected':''}" data-day="${d.id}">
-      <div class="wd">${d.wd}</div>
-      <div class="num">${fmtDate(d.date)}</div>
-    </div>`;
-  }).join('');
-  tabs.querySelectorAll('.tab').forEach(el=>{
-    el.onclick = ()=>{ selectedDay = el.dataset.day; render(); };
-  });
-}
-
-function renderBackToday(){
-  const todayId = computeTodayId();
-  const btn = document.getElementById('backToday');
-  if(selectedDay !== todayId){
-    btn.classList.add('show');
-    btn.onclick = ()=>{ selectedDay = todayId; render(); };
-  } else {
-    btn.classList.remove('show');
-  }
-}
-
-function renderDay(){
-  const meta = DAY_META.find(d=>d.id===selectedDay);
-  const day = state.days[selectedDay];
-  document.getElementById('dayTitle').textContent = `${fmtDate(meta.date)}（${meta.wd}）${day.title}`;
-  const doneCount = day.stops.filter(s=>s.done).length;
-  document.getElementById('dayProgress').textContent = `${doneCount}/${day.stops.length} 完成`;
-
-  const hotelDisplay = document.getElementById('hotelDisplay');
-  if(meta.hotel){
-    hotelDisplay.innerHTML = `<div class="hotel-info">
-      <div class="hotel-name" onclick="showHotelModal('${meta.hotel}')">🏨 ${meta.hotel}</div>
-    </div>`;
-  } else {
-    hotelDisplay.innerHTML = '';
-  }
-
-  const insuranceReminderDiv = document.getElementById('insuranceReminder');
-  if(selectedDay === 'd1'){
-    insuranceReminderDiv.innerHTML = `<div class="insurance-reminder"><span class="icon">🛡️</span><span><strong>落地當天立即投保日本旅遊保險</strong></span></div>`;
-  } else {
-    insuranceReminderDiv.innerHTML = '';
-  }
-
-  const tl = document.getElementById('timeline');
-  tl.innerHTML = day.stops.map((s,i)=>{
-    const isLast = i===day.stops.length-1;
-    const num = i + 1;
-    return `<div class="stop-wrapper">
-      <div class="stop ${s.done?'done':''}" data-id="${s.id}">
-        <div class="railcol">
-          <div class="node">${num}</div>
-          ${isLast?'':'<div class="line"></div>'}
-        </div>
-        <div class="card">
-          <div class="card-top">
-            <div class="card-main">
-              <div class="time-tag-row">
-                ${s.time?`<span class="time">${escapeHtml(s.time)}</span>`:''}
-                ${s.tag?`<span class="tag">${escapeHtml(s.tag)}</span>`:''}
-              </div>
-              <div class="name">${escapeHtml(s.name)}</div>
-              ${s.note?`<div class="note">${escapeHtml(s.note)}</div>`:''}
-              ${s.stopTime?`<div class="stop-duration">⏱️ ${escapeHtml(s.stopTime)}</div>`:''}
-            </div>
-            <button class="check-btn" data-act="toggle" title="標記完成">${s.done?'✓':''}</button>
-          </div>
-          <div class="card-footer">
-            <button class="nav-btn" data-act="nav">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:middle;margin-right:2px;"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-              地圖導航
-            </button>
-          </div>
-        </div>
+    <!-- 停車資訊總覽 -->
+    <h2 class="section-title">🅿️ Day 2 ~ Day 6 自駕停車導航總覽</h2>
+    <div class="card">
+      <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">點擊「開車導航」將直接開至景點<b>官方或周邊推薦停車場</b>，避免誤導至步行徒步區。</p>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>天數</th>
+              <th>主要景點 / 停靠點</th>
+              <th>導航目標 (停車場名稱)</th>
+              <th>MAPCODE</th>
+              <th>快速導航</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Day 2</b></td>
+              <td>奈良公園 / 東大寺</td>
+              <td>奈良登大路自動車駐車場</td>
+              <td><span class="mapcode-badge">11 354 093*22</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=奈良公園登大路駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 2</b></td>
+              <td>夫婦岩 / 二見興玉神社</td>
+              <td>二見浦公園無料駐車場</td>
+              <td><span class="mapcode-badge">118 577 031*14</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=夫婦岩+無料駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 2</b></td>
+              <td>伊勢城堡二見浦飯店</td>
+              <td>飯店專用停車場</td>
+              <td><span class="mapcode-badge">118 576 022*05</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=Hotel+Castle+Inn+Ise+Meotoiwa+Parking" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 3</b></td>
+              <td>鳥羽水族館</td>
+              <td>鳥羽水族館 附設立體駐車場</td>
+              <td><span class="mapcode-badge">118 536 718*33</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=鳥羽水族館+駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 3</b></td>
+              <td>Wisterian Life Club Toba</td>
+              <td>飯店附設停車場</td>
+              <td><span class="mapcode-badge">118 568 210*88</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=ウィスタリアンライフクラブ鳥羽" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 4</b></td>
+              <td>伊勢神宮 (內宮)</td>
+              <td>伊勢神宮 內宮前市營駐車場 (A1/B2)</td>
+              <td><span class="mapcode-badge">118 431 821*11</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=伊勢神宮內宮前市營駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 5</b></td>
+              <td>近江八幡水鄉 / 八幡山纜車</td>
+              <td>日牟禮八幡宮 宮前無料駐車場</td>
+              <td><span class="mapcode-badge">67 870 214*44</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=日牟禮八幡宮+駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 5</b></td>
+              <td>琵琶湖萬豪酒店</td>
+              <td>琵琶湖マリオットホテル 駐車場</td>
+              <td><span class="mapcode-badge">67 671 201*33</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=Lake+Biwa+Marriott+Hotel+Parking" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 6</b></td>
+              <td>白鬚神社 (水上鳥居)</td>
+              <td>白鬚神社 參拜者停車場</td>
+              <td><span class="mapcode-badge">263 512 809*00</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=白鬚神社+駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+            <tr>
+              <td><b>Day 6</b></td>
+              <td>大津湖岸 / 渚公園</td>
+              <td>大津湖岸なぎさ公園 駐車場</td>
+              <td><span class="mapcode-badge">7 225 311*22</span></td>
+              <td><a href="https://www.google.com/maps/search/?api=1&query=大津湖岸なぎさ公園+駐車場" target="_blank" class="btn-nav">📍 導航</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>`;
-  }).join('');
+    </div>
 
-  tl.querySelectorAll('[data-act="nav"]').forEach((el,i)=>{
-    el.onclick = ()=> openGoogleNav(day.stops[i].name);
-  });
+    <!-- 緊急醫療資訊 -->
+    <h2 class="section-title">🚑 緊急救援與醫療資訊</h2>
+    <div class="card">
+      <ul class="info-list">
+        <li><b>日本緊急救援電話：</b> 救護車/消防 <b>119</b> ｜ 警察局 <b>110</b> (可請求英文/繁體中文翻譯)</li>
+        <li><b>JNTO 日本政府觀光局 24小時繁中熱線：</b> 050-3816-2720</li>
+        <li><b>行程沿線具備外語急診對應醫院：</b>
+          <ul style="padding-left: 15px; margin-top: 5px; font-size: 0.9rem;">
+            <li><b>三重縣 (伊勢/鳥羽)：</b> 伊勢赤十字病院 (TEL: 0596-28-2171)</li>
+            <li><b>滋賀縣 (琵琶湖/大津)：</b> 滋賀醫科大學醫學部附屬病院 (TEL: 077-548-2111)</li>
+            <li><b>大阪府：</b> 大阪市立綜合醫療中心 (TEL: 06-6929-1221)</li>
+          </ul>
+        </li>
+        <li><b>海外突發疾病醫療險應備文件：</b> 診斷證明書正本、醫療費用收據正本、護照影本。</li>
+      </ul>
+    </div>
+  </div>
 
-  tl.querySelectorAll('[data-act="toggle"]').forEach((el,i)=>{
-    el.onclick = ()=>{ day.stops[i].done = !day.stops[i].done; saveToLocal(); render(); };
-  });
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // 行程資料 (含數字順序標記與停車場資訊)
+    const tripData = {
+      day1: {
+        title: "Day 1 ｜ 抵達關西機場 ➔ 前往大阪/環球影城周邊",
+        center: [34.5500, 135.3500],
+        zoom: 10,
+        spots: [
+          { num: 1, name: "關西國際機場 (取車)", lat: 34.4347, lng: 135.2441, mapcode: "262 018 322*88", navUrl: "https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport", desc: "抵達關西機場，辦理入境與租車手續。" },
+          { num: 2, name: "大阪環球影城 周邊飯店停車場", lat: 34.6654, lng: 135.4323, mapcode: "1 246 511*55", navUrl: "https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan", desc: "辦理入住，周邊商場散策準備明日行程。" }
+        ]
+      },
+      day2: {
+        title: "Day 2 ｜ 大阪 ➔ 奈良公園 ➔ 夫婦岩 ➔ 伊勢二見浦",
+        center: [34.6000, 136.2000],
+        zoom: 9,
+        spots: [
+          { num: 1, name: "奈良公園 登大路駐車場 (停車場)", lat: 34.6851, lng: 135.8328, mapcode: "11 354 093*22", navUrl: "https://www.google.com/maps/search/?api=1&query=奈良公園登大路駐車場", desc: "【停車優先】停妥車後步行至奈良公園、東大寺體驗餵鹿。" },
+          { num: 2, name: "二見浦公園無料駐車場 (夫婦岩)", lat: 34.5085, lng: 136.7888, mapcode: "118 577 031*14", navUrl: "https://www.google.com/maps/search/?api=1&query=夫婦岩+無料駐車場", desc: "【停車優先】免費停車場，步行前往二見興玉神社與夫婦岩。" },
+          { num: 3, name: "伊勢城堡二見浦飯店 停車場", lat: 34.5072, lng: 136.7831, mapcode: "118 576 022*05", navUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Castle+Inn+Ise+Meotoiwa+Parking", desc: "【飯店停車】入住 Hotel Castle Inn Ise Meotoiwa，享用溫泉。" }
+        ]
+      },
+      day3: {
+        title: "Day 3 ｜ 鳥羽水族館 ➔ 鳥羽海岸散策 ➔ 飯店休息",
+        center: [34.4750, 136.8400],
+        zoom: 12,
+        spots: [
+          { num: 1, name: "鳥羽水族館 附設立體駐車場", lat: 34.4815, lng: 136.8453, mapcode: "118 536 718*33", navUrl: "https://www.google.com/maps/search/?api=1&query=鳥羽水族館+駐車場", desc: "【停車優先】全日本飼育物種最多的水族館，雨天備案首選。" },
+          { num: 2, name: "Wisterian Life Club Toba 停車場", lat: 34.4632, lng: 136.8375, mapcode: "118 568 210*88", navUrl: "https://www.google.com/maps/search/?api=1&query=ウィスタリアンライフクラブ鳥羽", desc: "【飯店停車】入住 Wisterian Life Club Toba，享受海景與設施。" }
+        ]
+      },
+      day4: {
+        title: "Day 4 ｜ 伊勢神宮內宮 ➔ 高速公路SA ➔ 滋賀琵琶湖",
+        center: [34.8000, 136.3000],
+        zoom: 9,
+        spots: [
+          { num: 1, name: "伊勢神宮 內宮前市營駐車場 (A1/B2)", lat: 34.4580, lng: 136.7235, mapcode: "118 431 821*11", navUrl: "https://www.google.com/maps/search/?api=1&query=伊勢神宮內宮前市營駐車場", desc: "【停車優先】參拜伊勢神宮內宮，托福橫丁品嚐美食赤福餅。" },
+          { num: 2, name: "土山 SA 休息站 (新名神高速)", lat: 34.9351, lng: 136.2730, mapcode: "115 152 402*11", navUrl: "https://www.google.com/maps/search/?api=1&query=土山SA", desc: "中途休息站，提供完善親子設施與美食。" },
+          { num: 3, name: "琵琶湖萬豪酒店 停車場", lat: 35.1235, lng: 135.9860, mapcode: "67 671 201*33", navUrl: "https://www.google.com/maps/search/?api=1&query=Lake+Biwa+Marriott+Hotel+Parking", desc: "【飯店停車】入住 Lake Biwa Marriott Hotel，欣賞琵琶湖景。" }
+        ]
+      },
+      day5: {
+        title: "Day 5 ｜ 近江八幡水鄉 ➔ 八幡山纜車 ➔ 琵琶湖萬豪",
+        center: [35.1380, 136.0880],
+        zoom: 11,
+        spots: [
+          { num: 1, name: "日牟禮八幡宮 宮前無料駐車場", lat: 35.1389, lng: 136.0883, mapcode: "67 870 214*44", navUrl: "https://www.google.com/maps/search/?api=1&query=日牟禮八幡宮+駐車場", desc: "【停車優先】免費停車，體驗護城河水鄉遊船與古街散步。" },
+          { num: 2, name: "八幡山纜車 停車場", lat: 35.1402, lng: 136.0895, mapcode: "67 870 335*01", navUrl: "https://www.google.com/maps/search/?api=1&query=八幡山ロープウェー+駐車場", desc: "搭乘纜車登頂俯瞰近江八幡與琵琶湖風景。" },
+          { num: 3, name: "琵琶湖萬豪酒店 停車場", lat: 35.1235, lng: 135.9860, mapcode: "67 671 201*33", navUrl: "https://www.google.com/maps/search/?api=1&query=Lake+Biwa+Marriott+Hotel+Parking", desc: "【飯店停車】連住第二晚，享受溫泉與湖畔夕陽。" }
+        ]
+      },
+      day6: {
+        title: "Day 6 ｜ 白鬚神社 (水上鳥居) ➔ 大津湖岸 ➔ 歸還車輛",
+        center: [35.1800, 135.9500],
+        zoom: 10,
+        spots: [
+          { num: 1, name: "白鬚神社 參拜者停車場", lat: 35.2798, lng: 136.0022, mapcode: "263 512 809*00", navUrl: "https://www.google.com/maps/search/?api=1&query=白鬚神社+駐車場", desc: "【停車優先】欣賞湖中大鳥居，拍照請注意車道安全。" },
+          { num: 2, name: "大津湖岸渚公園 停車場", lat: 35.0065, lng: 135.8810, mapcode: "7 225 311*22", navUrl: "https://www.google.com/maps/search/?api=1&query=大津湖岸なぎさ公園+駐車場", desc: "【停車優先】湖畔咖啡廳休憩與親子散步。" },
+          { num: 3, name: "關西機場 / 市區租車還車處", lat: 34.4347, lng: 135.2441, mapcode: "262 018 322*88", navUrl: "https://www.google.com/maps/search/?api=1&query=Kansai+Airport+Car+Rental", desc: "加滿油後辦理歸還車輛。" }
+        ]
+      },
+      day7: {
+        title: "Day 7 ｜ 臨空城 Rinku Outlet 購物 ➔ 關西機場搭機返台",
+        center: [34.4100, 135.2900],
+        zoom: 12,
+        spots: [
+          { num: 1, name: "Rinku Premium Outlets 停車場", lat: 34.4068, lng: 135.2952, mapcode: "85 825 531*00", navUrl: "https://www.google.com/maps/search/?api=1&query=Rinku+Premium+Outlets+Parking", desc: "最後購物巡禮，買齊伴手禮。" },
+          { num: 2, name: "關西國際機場 (T1 / T2)", lat: 34.4347, lng: 135.2441, mapcode: "262 018 322*88", navUrl: "https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport", desc: "辦理登機手續，搭機返回台北。" }
+        ]
+      }
+    };
 
-  // 繪製與同步當天 Leaflet 地圖
-  renderMap();
-}
+    let map = null;
+    let markers = [];
+    let polyline = null;
 
-function renderMap(){
-  const day = state.days[selectedDay];
-  const validStops = day.stops.filter(s => s.lat && s.lng);
+    // 初始化地圖
+    function initMap() {
+      map = L.map('map').setView([34.6000, 136.2000], 9);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
 
-  if (!validStops.length) {
-    if(map && markerGroup) markerGroup.clearLayers();
-    return;
-  }
+      switchDay('day1');
+    }
 
-  if (!map) {
-    map = L.map('daymap');
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    markerGroup = L.featureGroup().addTo(map);
-  } else {
-    markerGroup.clearLayers();
-  }
+    // 切換天數與更新路線地圖
+    function switchDay(dayKey) {
+      // 切換按鈕 active 樣式
+      document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.day-btn')).find(btn => btn.getAttribute('onclick').includes(dayKey));
+      if (activeBtn) activeBtn.classList.add('active');
 
-  validStops.forEach((stop, idx) => {
-    const marker = L.marker([stop.lat, stop.lng])
-      .bindPopup(`<b>${idx + 1}. ${escapeHtml(stop.name)}</b><br>${escapeHtml(stop.note || '')}`);
-    markerGroup.addLayer(marker);
-  });
+      const data = tripData[dayKey];
+      if (!data) return;
 
-  map.invalidateSize();
-  if (validStops.length > 0) {
-    map.fitBounds(markerGroup.getBounds(), { padding: [30, 30] });
-  }
-}
+      // 清除舊標記與折線
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+      if (polyline) map.removeLayer(polyline);
 
-function showHotelModal(name){
-  const h = HOTELS[name];
-  const titleEl = document.getElementById('hotelModalTitle');
-  const contentEl = document.getElementById('hotelModalContent');
-  if(!h){
-    titleEl.textContent = name;
-    contentEl.innerHTML = '飯店資訊';
-  } else {
-    titleEl.textContent = `🏨 ${name}`;
-    contentEl.innerHTML = `<div><strong>📍 地址：</strong>${h.address}</div><div style="margin-top:10px;"><strong>📞 電話：</strong>${h.phone}</div><div style="margin-top:10px;"><strong>⏰ Check-in：</strong>${h.checkin} / Check-out：${h.checkout}</div>`;
-  }
-  document.getElementById('hotelModal').style.display = 'flex';
-}
+      const latLngs = [];
 
-window.addEventListener('DOMContentLoaded', init);
-</script>
+      // 建立帶有數字 1,2,3 的標記與路線點
+      data.spots.forEach(spot => {
+        const point = [spot.lat, spot.lng];
+        latLngs.push(point);
+
+        const customIcon = L.divIcon({
+          className: 'custom-numbered-marker',
+          html: `<span>${spot.num}</span>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+
+        const marker = L.marker(point, { icon: customIcon })
+          .addTo(map)
+          .bindPopup(`
+            <b>${spot.num}. ${spot.name}</b><br>
+            <span style="font-size:0.8rem; color:#666;">MAPCODE: ${spot.mapcode}</span><br>
+            <p style="font-size:0.85rem; margin-top:4px;">${spot.desc}</p>
+            <a href="${spot.navUrl}" target="_blank" style="display:inline-block; margin-top:6px; color:#1e88e5; font-weight:bold;">🚗 開車導航至此停車場</a>
+          `);
+
+        markers.push(marker);
+      });
+
+      // 繪製順序折線路線
+      polyline = L.polyline(latLngs, {
+        color: '#1d3557',
+        weight: 4,
+        dashArray: '6, 8',
+        opacity: 0.85
+      }).addTo(map);
+
+      // 自動調整地圖視野包覆所有點位
+      map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
+
+      // 更新下方當日行程面板
+      renderDayInfo(data);
+    }
+
+    // 渲染當日行程面板
+    function renderDayInfo(data) {
+      const panel = document.getElementById('day-info-panel');
+      let html = `<h2 class="section-title">${data.title}</h2>`;
+
+      data.spots.forEach(spot => {
+        html += `
+          <div class="card">
+            <h3><span class="tag-parking">${spot.num}</span> ${spot.name}</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 6px;"><b>MAPCODE：</b> <span class="mapcode-badge">${spot.mapcode}</span></p>
+            <p style="font-size: 0.9rem; color: #444;">${spot.desc}</p>
+            <a href="${spot.navUrl}" target="_blank" class="btn-nav">🚗 開車導航至此位置</a>
+          </div>
+        `;
+      });
+
+      panel.innerHTML = html;
+    }
+
+    // 頁面載入後初始化地圖
+    window.onload = initMap;
+  </script>
 </body>
 </html>
