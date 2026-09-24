@@ -95,14 +95,16 @@
 
   .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
   .card-main{min-width:0;}
-  .time{font-size:11.5px;color:var(--accent);font-weight:700;margin-bottom:2px;}
+  .time-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:2px;}
+  .time{font-size:11.5px;color:var(--accent);font-weight:700;}
+  .stay-badge{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;color:#D6336C;font-weight:700;background:#FFE1EC;padding:1px 8px;border-radius:100px;}
   .name{font-size:15px;font-weight:700;line-height:1.35;word-break:break-word;}
   .stop.done .name{color:var(--ink-soft);text-decoration:line-through;font-weight:500;}
   .note{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.5;}
   .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:100px;background:#D3EAE7;color:#1F6260;font-weight:700;margin-bottom:4px;}
   .curtag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:100px;background:var(--accent);color:#fff;font-weight:700;margin-bottom:4px;}
 
-  .card-bottom{display:flex;justify-content:flex-end;margin-top:6px;}
+  .card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
   .drive-time-row{display:flex;align-items:center;gap:6px;padding:6px 0 12px 34px;}
   .drive-badge{
     display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);
@@ -442,6 +444,13 @@
           </div>
         </div>
         <div class="attraction-item">
+          <div class="attraction-name">浮御堂（滿月寺）</div>
+          <div class="attraction-details">
+            <div>⏰ 08:00-17:00  💴 入場¥600（兒童¥300）</div>
+            <div>📸 湖中寺廟，攝影勝地</div>
+          </div>
+        </div>
+        <div class="attraction-item">
           <div class="attraction-name">PIERI MORIYAMA</div>
           <div class="attraction-details">
             <div>🛍️ 湖畔購物中心，餐廳、超市齊全，適合晚餐與休息</div>
@@ -451,13 +460,6 @@
 
       <div class="attraction-section">
         <div class="attraction-day">Day 6（11/02）比叡山～返回大阪</div>
-        <div class="attraction-item">
-          <div class="attraction-name">浮御堂（滿月寺）</div>
-          <div class="attraction-details">
-            <div>⏰ 08:00-17:00  💴 入場¥600（兒童¥300）</div>
-            <div>📸 湖中寺廟，攝影勝地</div>
-          </div>
-        </div>
         <div class="attraction-item">
           <div class="attraction-name">比叡山延曆寺</div>
           <div class="attraction-details">
@@ -664,6 +666,11 @@
           <div class="parking-item">• びわ湖バレイ駐車場：平日 ¥1,000 / 假日 ¥2,000（1日）</div>
         </div>
         <div class="parking-section">
+          <div class="parking-title">🅿️ 浮御堂（滿月寺）</div>
+          <div class="parking-main">寺廟參拜停車場</div>
+          <div class="parking-item">• 浮御堂免費專用參拜停車場：<strong>無料</strong>（約可容納 25～30 輛普通小客車）</div>
+        </div>
+        <div class="parking-section">
           <div class="parking-title">🅿️ PIERI MORIYAMA</div>
           <div class="parking-main">購物中心停車場</div>
           <div class="parking-item">• PIERI MORIYAMA 駐車場：<strong>無料</strong>（大型購物中心停車場）</div>
@@ -672,11 +679,6 @@
 
       <div class="attraction-section">
         <div class="attraction-day">Day 6（11/02）比叡山～返回大阪</div>
-        <div class="parking-section">
-          <div class="parking-title">🅿️ 浮御堂（滿月寺）</div>
-          <div class="parking-main">寺廟參拜停車場</div>
-          <div class="parking-item">• 浮御堂免費專用參拜停車場：<strong>無料</strong>（約可容納 25～30 輛普通小客車）</div>
-        </div>
         <div class="parking-section">
           <div class="parking-title">🅿️ 比叡山延曆寺 三區域停車場</div>
           <div class="parking-main">橫川地區（北）</div>
@@ -710,7 +712,7 @@
   </div>
 
 <script>
-const DATA_VERSION = 'v2.3'; 
+const DATA_VERSION = 'v2.6'; 
 
 const DAY_META = [
   {id:'d1', date:'2026-10-28', wd:'三', hotel:'Hotel Trusty 大阪阿倍野'},
@@ -813,63 +815,63 @@ function defaultData(){
     version: DATA_VERSION,
     days: {
       d1: {title:'抵達關西・入住天王寺', stops:[
-        {id:cid(),time:'17:55',name:'關西機場抵達',note:'班機抵達 第一航廈入境,可搭 JR特急HARUKA或 JR關空快速 到天王寺',tag:'',driveTime:'電車約 35~50 分鐘',done:false},
-        {id:cid(),time:'19:30',name:'龜王拉麵 天王寺店',note:'晚餐，可以先逛 Q\'s Mall',tag:'餐廳',driveTime:'步行 5 分鐘',done:false},
-        {id:cid(),time:'',name:'Hotel Trusty 大阪阿倍野',note:'入住',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'17:55',name:'關西機場抵達',note:'班機抵達 第一航廈入境,可搭 JR特急HARUKA或 JR關空快速 到天王寺',tag:'',duration:'45 分鐘（入境通關）',driveTime:'電車約 35~50 分鐘',done:false},
+        {id:cid(),time:'19:30',name:'龜王拉麵 天王寺店',note:'晚餐，可以先逛 Q\'s Mall',tag:'餐廳',duration:'60 分鐘',driveTime:'步行 5 分鐘',done:false},
+        {id:cid(),time:'',name:'Hotel Trusty 大阪阿倍野',note:'入住',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d2: {title:'奈良・前進伊勢', stops:[
-        {id:cid(),time:'08:30',name:'Orix 阿倍野店 取車',note:'08:00左右退房出門，租車時確認安全座椅、ETC卡',tag:'',driveTime:'約 50 分鐘',done:false},
-        {id:cid(),time:'10:00',name:'奈良春日大社',note:'參拜春日大社、夫婦大國社(水籤)與看鹿',tag:'景點',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'11:00',name:'GU橿原店',note:'順路購物',tag:'',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'12:00',name:'三輪素麵 やまなか',note:'特色午餐',tag:'餐廳',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'14:00',name:'奈良談山神社',note:'',tag:'景點',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'16:30',name:'プティットフィーユ',note:'買點心',tag:'',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'17:00',name:'高見峠展望台',note:'山路休息點',tag:'',driveTime:'約 55 分鐘',done:false},
-        {id:cid(),time:'18:30',name:'一升びん 宮町店',note:'松阪牛燒肉',tag:'餐廳',driveTime:'約 30 分鐘',done:false},
-        {id:cid(),time:'20:00',name:'Price Cut Ise-Futami store',note:'買明天早餐食材',tag:'',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住首夜）',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'08:30',name:'Orix 阿倍野店 取車',note:'08:00左右退房出門，租車時確認安全座椅、ETC卡',tag:'',duration:'30 分鐘（取車手續）',driveTime:'約 50 分鐘',done:false},
+        {id:cid(),time:'10:00',name:'奈良春日大社',note:'參拜春日大社、夫婦大國社(水籤)與看鹿',tag:'景點',duration:'60 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'11:00',name:'GU橿原店',note:'順路購物',tag:'',duration:'30 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'12:00',name:'三輪素麵 やまなか',note:'特色午餐',tag:'餐廳',duration:'60 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'14:00',name:'奈良談山神社',note:'',tag:'景點',duration:'45 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'16:30',name:'プティットフィーユ',note:'買點心',tag:'',duration:'20 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'17:00',name:'高見峠展望台',note:'山路休息點',tag:'',duration:'15 分鐘',driveTime:'約 55 分鐘',done:false},
+        {id:cid(),time:'18:30',name:'一升びん 宮町店',note:'松阪牛燒肉',tag:'餐廳',duration:'90 分鐘',driveTime:'約 30 分鐘',done:false},
+        {id:cid(),time:'20:00',name:'Price Cut Ise-Futami store',note:'買明天早餐食材',tag:'',duration:'20 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住首夜）',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d3: {title:'伊勢・日出・鳥羽', stops:[
-        {id:cid(),time:'06:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發 (日出時間約06:00-06:30)',tag:'',driveTime:'步行 5 分鐘',done:false},
-        {id:cid(),time:'06:15',name:'二見浦夫婦岩',note:'🌅 觀賞日出、拍照勝地、夫婦大國社參拜',tag:'景點',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'06:30',name:'二見興玉神社',note:'日出後參拜、靜心',tag:'景點',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'07:15',name:'COQUELICOT ROUGE',note:'買早餐麵包',tag:'',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'08:00',name:'伊勢神宮外宮',note:'⭐ 外宮參拜順序：外宮正宮→外宮別宮（多賀宮、土宮）→三つ石參觀',tag:'景點',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'10:30',name:'伊勢神宮內宮',note:'⭐ 內宮必逛：皇大神宮正宮→別宮（風日祈宮等）→瀧原宮(時間許可)。本殿要脫鞋參觀可選',tag:'景點',driveTime:'步行 5 分鐘',done:false},
-        {id:cid(),time:'12:00',name:'托福橫丁',note:'午餐赤福餅、伊勢烏龍麵、古街散步',tag:'餐廳',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'14:30',name:'鳥羽水族館',note:'看海豚、儒艮、日本僅存唯一海獺🦦',tag:'景點',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住飯店',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'06:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發 (日出時間約06:00-06:30)',tag:'',duration:'',driveTime:'步行 5 分鐘',done:false},
+        {id:cid(),time:'06:15',name:'二見浦夫婦岩',note:'🌅 觀賞日出、拍照勝地、夫婦大國社參拜',tag:'景點',duration:'30 分鐘',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'06:30',name:'二見興玉神社',note:'日出後參拜、靜心',tag:'景點',duration:'20 分鐘',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'07:15',name:'COQUELICOT ROUGE',note:'買早餐麵包',tag:'',duration:'15 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'08:00',name:'伊勢神宮外宮',note:'⭐ 外宮參拜順序：外宮正宮→外宮別宮（多賀宮、土宮）→三つ石參觀',tag:'景點',duration:'60 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'10:30',name:'伊勢神宮內宮',note:'⭐ 內宮必逛：皇大神宮正宮→別宮（風日祈宮等）→瀧原宮(時間許可)。本殿要脫鞋參觀可選',tag:'景點',duration:'90 分鐘',driveTime:'步行 5 分鐘',done:false},
+        {id:cid(),time:'12:00',name:'托福橫丁',note:'午餐赤福餅、伊勢烏龍麵、古街散步',tag:'餐廳',duration:'90 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'14:30',name:'鳥羽水族館',note:'看海豚、儒艮、日本僅存唯一海獺🦦',tag:'景點',duration:'120 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住飯店',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d4: {title:'伊勢・近江八幡', stops:[
-        {id:cid(),time:'08:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發',tag:'',driveTime:'約 90 分鐘',done:false},
-        {id:cid(),time:'09:30',name:'伊勢海洋樂園（9:30營業）',note:'注意餵食秀時間，建議出發前確認官網',tag:'景點',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'11:00',name:'birthday津市店',note:'',tag:'',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'13:00',name:'La Collina Ōmi-Hachiman',note:'童話年輪蛋糕甜點店',tag:'餐廳',driveTime:'約 5 分鐘',done:false},
-        {id:cid(),time:'15:00',name:'日牟禮八幡宮',note:'',tag:'景點',driveTime:'約 40 分鐘',done:false},
-        {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'入住琵琶湖畔飯店',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'08:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發',tag:'',duration:'',driveTime:'約 90 分鐘',done:false},
+        {id:cid(),time:'09:30',name:'伊勢海洋樂園（9:30營業）',note:'注意餵食秀時間，建議出發前確認官網',tag:'景點',duration:'120 分鐘',driveTime:'約 35 分鐘',done:false},
+        {id:cid(),time:'11:00',name:'birthday津市店',note:'',tag:'',duration:'20 分鐘',driveTime:'約 35 分鐘',done:false},
+        {id:cid(),time:'13:00',name:'La Collina Ōmi-Hachiman',note:'童話年輪蛋糕甜點店',tag:'餐廳',duration:'60 分鐘',driveTime:'約 5 分鐘',done:false},
+        {id:cid(),time:'15:00',name:'日牟禮八幡宮',note:'',tag:'景點',duration:'40 分鐘',driveTime:'約 40 分鐘',done:false},
+        {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'入住琵琶湖畔飯店',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d5: {title:'琵琶湖環湖・親子行程', stops:[
-        {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發~',tag:'',driveTime:'約 50 分鐘',done:false},
-        {id:cid(),time:'09:50',name:'白鬚神社',note:'水上鳥居',tag:'景點',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'10:30',name:'メタセコイアと馬の森',note:'🐴 可近距離接觸馬匹',tag:'景點',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'11:30',name:'Biwako Valley Ropeway',note:'搭纜車賞高空湖景',tag:'景點',driveTime:'約 40 分鐘',done:false},
-        {id:cid(),time:'14:00',name:'PIERI MORIYAMA',note:'湖畔購物中心，晚餐、休息',tag:'',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'返回飯店休息',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發~',tag:'',duration:'',driveTime:'約 50 分鐘',done:false},
+        {id:cid(),time:'09:50',name:'白鬚神社',note:'水上鳥居',tag:'景點',duration:'30 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'10:30',name:'メタセコイアと馬の森',note:'🐴 可近距離接觸馬匹',tag:'景點',duration:'45 分鐘',driveTime:'約 35 分鐘',done:false},
+        {id:cid(),time:'11:30',name:'Biwako Valley Ropeway',note:'搭纜車賞高空湖景',tag:'景點',duration:'120 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'13:50',name:'浮御堂（滿月寺）',note:'湖中寺廟，攝影勝地',tag:'景點',duration:'30 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'14:45',name:'PIERI MORIYAMA',note:'湖畔購物中心，稍作休息',tag:'',duration:'60 分鐘',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'返回飯店休息',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d6: {title:'比叡山・返回大阪', stops:[
-        {id:cid(),time:'08:30',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'08:50',name:'浮御堂（滿月寺）',note:'湖中寺廟，攝影勝地',tag:'景點',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'09:30',name:'比叡山延曆寺 橫川地區',note:'⭐ 橫川中堂參拜（世界遺產、延曆寺北邊最古老建築）',tag:'景點',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'10:30',name:'比叡山延曆寺 西塔地區',note:'⭐ 釋迦堂、転法輪堂參拜（西塔重點）',tag:'景點',driveTime:'約 15 分鐘',done:false},
-        {id:cid(),time:'11:30',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓',tag:'景點',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'13:00',name:'夢見が丘展望台',note:'鳥瞰琵琶湖360°景致、午餐休息',tag:'景點',driveTime:'約 80 分鐘',done:false},
-        {id:cid(),time:'15:00',name:'還車（Orix 阿倍野店）',note:'預約 可提早歸還',tag:'',driveTime:'',done:false},
-        {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',driveTime:'',done:false},
+        {id:cid(),time:'08:30',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',duration:'',driveTime:'約 30 分鐘',done:false},
+        {id:cid(),time:'09:00',name:'比叡山延曆寺 橫川地區',note:'⭐ 橫川中堂參拜（世界遺產、延曆寺北邊最古老建築）',tag:'景點',duration:'40 分鐘',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'10:30',name:'比叡山延曆寺 西塔地區',note:'⭐ 釋迦堂、転法輪堂參拜（西塔重點）',tag:'景點',duration:'30 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'11:30',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓',tag:'景點',duration:'45 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'13:00',name:'夢見が丘展望台',note:'鳥瞰琵琶湖360°景致、午餐休息',tag:'景點',duration:'30 分鐘',driveTime:'約 80 分鐘',done:false},
+        {id:cid(),time:'15:00',name:'還車（Orix 阿倍野店）',note:'預約 可提早歸還',tag:'',duration:'20 分鐘',driveTime:'',done:false},
+        {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d7: {title:'返程', stops:[
-        {id:cid(),time:'08:00',name:'天王寺都城市飯店',note:'早餐自備~~退房出發',tag:'',driveTime:'步行 3 分鐘',done:false},
-        {id:cid(),time:'09:00',name:'天王寺駅',note:'搭乘 HARUKA 至關西機場',tag:'交通',driveTime:'電車約 45 分鐘',done:false},
-        {id:cid(),time:'11:30',name:'關西機場起飛',note:'逛逛免稅店~~搭機返台',tag:'班機',driveTime:'',done:false},
+        {id:cid(),time:'08:00',name:'天王寺都城市飯店',note:'早餐自備~~退房出發',tag:'',duration:'',driveTime:'步行 3 分鐘',done:false},
+        {id:cid(),time:'09:00',name:'天王寺駅',note:'搭乘 HARUKA 至關西機場',tag:'交通',duration:'候車約 15 分鐘',driveTime:'電車約 45 分鐘',done:false},
+        {id:cid(),time:'11:30',name:'關西機場起飛',note:'逛逛免稅店~~搭機返台',tag:'班機',duration:'登機手續+免稅店 約 90 分鐘',driveTime:'',done:false},
       ]},
     }
   };
@@ -1062,17 +1064,20 @@ function renderDay(){
           <div class="card-top">
             <div class="card-main">
               ${s.tag?`<span class="tag">${escapeHtml(s.tag)}</span>`:''}
-              ${s.time?`<div class="time">${escapeHtml(s.time)}</div>`:''}
+              ${(s.time || s.duration) ? `<div class="time-row">
+                ${s.time?`<span class="time">${escapeHtml(s.time)}</span>`:''}
+                ${s.duration?`<span class="stay-badge">⏱ 停留約${escapeHtml(s.duration)}</span>`:''}
+              </div>` : ''}
               <div class="name">${escapeHtml(s.name)||'（未命名地點）'}</div>
               ${s.note?`<div class="note">${escapeHtml(s.note)}</div>`:''}
             </div>
+          </div>
+          <div class="card-bottom">
             <div class="actions">
               <div class="iconbtn check" data-act="toggle">${s.done?'✓':''}</div>
               <div class="iconbtn" data-act="edit">✎</div>
               <div class="iconbtn" data-act="del">×</div>
             </div>
-          </div>
-          <div class="card-bottom">
             <div class="iconbtn nav" data-act="nav" title="Google Map 導航">GO</div>
           </div>`}
         </div>
@@ -1148,6 +1153,7 @@ function renderEditBox(s){
         <input type="text" id="editTag_${s.id}" value="${escapeHtml(s.tag)}" placeholder="標籤">
       </div>
       <input type="text" id="editName_${s.id}" value="${escapeHtml(s.name)}" placeholder="地點名稱">
+      <input type="text" id="editDuration_${s.id}" value="${escapeHtml(s.duration)}" placeholder="預計停留時間 (如: 60 分鐘)">
       <input type="text" id="editDrive_${s.id}" value="${escapeHtml(s.driveTime)}" placeholder="前往下一站車程 (如: 約 30 分鐘)">
       <textarea id="editNote_${s.id}" placeholder="備註資訊">${escapeHtml(s.note)}</textarea>
       <div class="editbtns">
@@ -1173,6 +1179,7 @@ function saveEdit(id){
     s.time = document.getElementById(`editTime_${id}`).value.trim();
     s.tag = document.getElementById(`editTag_${id}`).value.trim();
     s.name = document.getElementById(`editName_${id}`).value.trim();
+    s.duration = document.getElementById(`editDuration_${id}`).value.trim();
     s.driveTime = document.getElementById(`editDrive_${id}`).value.trim();
     s.note = document.getElementById(`editNote_${id}`).value.trim();
     saveToLocal();
@@ -1190,7 +1197,7 @@ function cancelEdit(){
 function addNewStop(){
   const day = state.days[selectedDay];
   const newId = cid();
-  day.stops.push({id:newId, time:'', name:'', note:'', tag:'', driveTime:'', done:false});
+  day.stops.push({id:newId, time:'', name:'', note:'', tag:'', duration:'', driveTime:'', done:false});
   editingId = newId;
   render();
   focusEditName();
