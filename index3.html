@@ -481,13 +481,6 @@
       <div class="attraction-section">
         <div class="attraction-day">Day 6（11/02）比叡山～返回大阪</div>
         <div class="attraction-item">
-          <div class="attraction-name">舊竹林院</div>
-          <div class="attraction-details">
-            <div>📍 京都大原著名庭園</div>
-            <div>🍁 楓葉季知名景點，順路可安排</div>
-          </div>
-        </div>
-        <div class="attraction-item">
           <div class="attraction-name">ケーブル坂本駅（搭纜車）</div>
           <div class="attraction-details">
             <div>🚡 坂本纜車，日本最長纜車路線（約2km）</div>
@@ -713,11 +706,6 @@
       <div class="attraction-section">
         <div class="attraction-day">Day 6（11/02）比叡山～返回大阪</div>
         <div class="parking-section">
-          <div class="parking-title">🅿️ 舊竹林院</div>
-          <div class="parking-main">京都大原</div>
-          <div class="parking-item">• 請出發前於官網或現場確認停車場位置與費用</div>
-        </div>
-        <div class="parking-section">
           <div class="parking-title">🅿️ ケーブル坂本駅</div>
           <div class="parking-main">纜車山下站停車場</div>
           <div class="parking-item">• 坂本ケーブル延暦寺駅 山下駐車場：請於現場確認費用</div>
@@ -757,7 +745,7 @@
   </div>
 
 <script>
-const DATA_VERSION = 'v3.0'; 
+const DATA_VERSION = 'v3.1'; 
 
 const DAY_META = [
   {id:'d1', date:'2026-10-28', wd:'三', hotel:'Hotel Trusty 大阪阿倍野'},
@@ -811,7 +799,6 @@ const LOCATION_COORDS = {
   'なみ木食堂 ツバメ': [35.4010, 136.0550],
   'PIERI MORIYAMA': [35.1180, 136.0010],
   '浮御堂': [35.1114, 135.9221],
-  '舊竹林院': [35.1260, 135.8330],
   'ケーブル坂本駅（搭纜車）': [35.0764, 135.8574],
   '枚方公園': [34.8130, 135.6520],
   '還車': [34.6460, 135.5252],
@@ -907,12 +894,11 @@ function defaultData(){
         {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'返回飯店休息',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d6: {title:'比叡山・返回大阪', stops:[
-        {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',duration:'',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'09:25',name:'舊竹林院',note:'京都大原著名庭園，楓葉知名景點',tag:'景點',duration:'40 分鐘',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'10:15',name:'ケーブル坂本駅（搭纜車）',note:'搭乘坂本纜車上比叡山，日本最長纜車路線，沿途可欣賞琵琶湖景致，來回發車時間(每小時兩班)為00分、30分',tag:'交通',duration:'20 分鐘（購票+候車）',driveTime:'纜車約 11 分鐘',done:false},
-        {id:cid(),time:'11:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓。午餐在「鶴㐂そば 比叡山店（和労堂）」用餐',tag:'景點',duration:'120 分鐘（含午餐）',driveTime:'纜車約11分鐘+ 65分鐘',done:false},
-        {id:cid(),time:'14:00',name:'枚方公園',note:'可視情況安排附近景點（如ひらかたパーク）',tag:'景點',duration:'90 分鐘',driveTime:'約 45 分鐘',done:false},
-        {id:cid(),time:'16:25',name:'還車（Orix 阿倍野店）',note:'預約 可提早歸還',tag:'',duration:'20 分鐘',driveTime:'',done:false},
+        {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',duration:'',driveTime:'約 35 分鐘',done:false},
+        {id:cid(),time:'09:35',name:'ケーブル坂本駅（搭纜車）',note:'搭乘坂本纜車上比叡山，日本最長纜車路線，沿途可欣賞琵琶湖景致，來回發車時間(每小時兩班)為00分、30分',tag:'交通',duration:'20 分鐘（購票+候車）',driveTime:'纜車約 11 分鐘',done:false},
+        {id:cid(),time:'10:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（在整修 可參觀內部）、阿彌陀堂、鐘樓。午餐在「鶴㐂そば 比叡山店（和労堂）」用餐',tag:'景點',duration:'120 分鐘（含午餐）',driveTime:'纜車約11分鐘+ 65分鐘',done:false},
+        {id:cid(),time:'13:15',name:'枚方公園',note:'可視情況安排附近景點（如ひらかたパーク）',tag:'景點',duration:'180 分鐘',driveTime:'約 45 分鐘',done:false},
+        {id:cid(),time:'17:45',name:'還車（Orix 阿倍野店）',note:'預約 可提早歸還',tag:'',duration:'20 分鐘',driveTime:'',done:false},
         {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d7: {title:'返程', stops:[
