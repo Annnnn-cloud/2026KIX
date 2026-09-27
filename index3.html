@@ -392,6 +392,12 @@
             <div>👨‍👩‍👧 日本最大水族館，儒艮必看~還有日本僅存、唯一能看到的海獺🥺🥺</div>
           </div>
         </div>
+        <div class="attraction-item">
+          <div class="attraction-name">オウギヤ（家庭料理 扇屋）</div>
+          <div class="attraction-details">
+            <div>🍚 家庭料理，晚餐選擇</div>
+          </div>
+        </div>
       </div>
 
       <div class="attraction-section">
@@ -442,6 +448,13 @@
           </div>
         </div>
         <div class="attraction-item">
+          <div class="attraction-name">なみ木食堂 ツバメ</div>
+          <div class="attraction-details">
+            <div>🍚 午餐</div>
+            <div>📝 備案：桜町のごはん屋さん ジャッロ・フェリーチェ，或到 Biwako Valley Ropeway 再吃午餐</div>
+          </div>
+        </div>
+        <div class="attraction-item">
           <div class="attraction-name">Biwako Valley Ropeway（纜車）</div>
           <div class="attraction-details">
             <div>⏰ 09:00–16:00  💴 往返¥2,600 / 4歲¥1,300</div>
@@ -487,13 +500,13 @@
             <div>⏰ 09:00–16:00</div>
             <div>💴 入場¥700（兒童¥350）</div>
             <div>🏯 日本佛教史蹟，世界遺產!有機會欣賞到早楓~~</div>
+            <div>🍜 午餐：鶴㐂そば 比叡山店（和労堂）</div>
           </div>
         </div>
         <div class="attraction-item">
-          <div class="attraction-name">近江牛焼肉 咲蔵 大津店</div>
+          <div class="attraction-name">枚方公園</div>
           <div class="attraction-details">
-            <div>🥩 近江牛燒肉午餐，大津人氣店家</div>
-            <div>⚠️ 建議先預約</div>
+            <div>📍 可視情況安排附近景點（如ひらかたパーク）</div>
           </div>
         </div>
       </div>
@@ -714,12 +727,13 @@
           <div class="parking-title">🅿️ 比叡山延曆寺 東塔地區</div>
           <div class="parking-main">纜車山上站步行可達</div>
           <div class="parking-item">• 比叡山延曆寺 東塔停車場：<strong>無料</strong>（150～200台）⭐ 距根本中堂最近（自駕上山者適用）</div>
+          <div class="parking-item">• 「鶴㐂そば 比叡山店（和労堂）」位於東塔範圍內，可步行前往用餐</div>
           <div class="parking-item" style="margin-top:8px;">⚠️ <strong>本行程改搭纜車上山，若自駕改開車前往：</strong>需另外支付比叡山Driveway收費道路通行費（約 ¥2,300～2,800）。</div>
         </div>
         <div class="parking-section">
-          <div class="parking-title">🅿️ 近江牛焼肉 咲蔵 大津店</div>
-          <div class="parking-main">店家停車場</div>
-          <div class="parking-item">• 請出發前確認店家停車資訊或先電話預約</div>
+          <div class="parking-title">🅿️ 枚方公園</div>
+          <div class="parking-main">周邊停車場</div>
+          <div class="parking-item">• 請出發前確認附近停車場費用與位置（如ひらかたパーク專用停車場）</div>
         </div>
       </div>
 
@@ -743,7 +757,7 @@
   </div>
 
 <script>
-const DATA_VERSION = 'v2.8'; 
+const DATA_VERSION = 'v3.0'; 
 
 const DAY_META = [
   {id:'d1', date:'2026-10-28', wd:'三', hotel:'Hotel Trusty 大阪阿倍野'},
@@ -784,6 +798,7 @@ const LOCATION_COORDS = {
   '伊勢神宮內宮': [34.4550, 136.7258],
   '托福橫丁': [34.4612, 136.7244],
   '鳥羽水族館': [34.4540, 136.8452],
+  'オウギヤ': [34.4870, 136.7100],
   '伊勢海洋樂園（9:30營業）': [34.4632, 136.8305],
   'birthday津市店': [34.7185, 136.5058],
   '滋賀農業公園 Blumen之丘': [34.9986, 136.2045],
@@ -793,11 +808,12 @@ const LOCATION_COORDS = {
   'Biwako Valley Ropeway': [35.1950, 135.9234],
   '白鬚神社': [35.2778, 136.0136],
   'メタセコイアと馬の森': [35.4000, 136.0500],
+  'なみ木食堂 ツバメ': [35.4010, 136.0550],
   'PIERI MORIYAMA': [35.1180, 136.0010],
   '浮御堂': [35.1114, 135.9221],
   '舊竹林院': [35.1260, 135.8330],
   'ケーブル坂本駅（搭纜車）': [35.0764, 135.8574],
-  '近江牛焼肉 咲蔵 大津店': [35.0045, 135.8686],
+  '枚方公園': [34.8130, 135.6520],
   '還車': [34.6460, 135.5252],
   '天王寺駅': [34.6468, 135.5207],
   '比叡山延曆寺': [35.0706, 135.8407],
@@ -869,32 +885,34 @@ function defaultData(){
         {id:cid(),time:'10:30',name:'伊勢神宮內宮',note:'⭐ 內宮必逛：皇大神宮正宮→別宮（風日祈宮等）→瀧原宮(時間許可)。本殿要脫鞋參觀可選',tag:'景點',duration:'90 分鐘',driveTime:'步行 5 分鐘',done:false},
         {id:cid(),time:'12:00',name:'托福橫丁',note:'午餐赤福餅、伊勢烏龍麵、古街散步',tag:'餐廳',duration:'90 分鐘',driveTime:'約 25 分鐘',done:false},
         {id:cid(),time:'14:30',name:'鳥羽水族館',note:'看海豚、儒艮、日本僅存唯一海獺🦦',tag:'景點',duration:'120 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'16:50',name:'オウギヤ',note:'晚餐，家庭料理 扇屋',tag:'餐廳',duration:'90 分鐘',driveTime:'約 15 分鐘',done:false},
         {id:cid(),time:'',name:'Hotel Castle Inn Ise Meotoiwa',note:'有體力可先去逛AEON TOWN Ise LaLaPark~再回飯店',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d4: {title:'伊勢・近江八幡', stops:[
-        {id:cid(),time:'08:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發',tag:'',duration:'',driveTime:'約 90 分鐘',done:false},
-        {id:cid(),time:'09:30',name:'伊勢海洋樂園（9:30營業）',note:'注意餵食秀時間，建議出發前確認官網',tag:'景點',duration:'150 分鐘',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'12:00',name:'birthday津市店',note:'',tag:'',duration:'55 分鐘',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'13:30',name:'La Collina Ōmi-Hachiman',note:'童話年輪蛋糕甜點店',tag:'餐廳',duration:'85 分鐘',driveTime:'約 5 分鐘',done:false},
-        {id:cid(),time:'15:00',name:'日牟禮八幡宮',note:'',tag:'景點',duration:'60 分鐘',driveTime:'約 40 分鐘',done:false},
+        {id:cid(),time:'09:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'9:15左右退房~自備早餐出發',tag:'',duration:'',driveTime:'約 5 分鐘',done:false},
+        {id:cid(),time:'09:30',name:'伊勢海洋樂園（9:30營業）',note:'注意餵食秀時間，建議出發前確認官網~9:50跟水獺握手/10:10北海獅進食/10:40海豹摸摸/11:15海獅進食',tag:'景點',duration:'120 分鐘',driveTime:'約 55 分鐘',done:false},
+        {id:cid(),time:'12:30',name:'birthday津市店',note:'',tag:'',duration:'40 分鐘',driveTime:'約 90 分鐘',done:false},
+        {id:cid(),time:'14:30',name:'La Collina Ōmi-Hachiman',note:'童話年輪蛋糕甜點店',tag:'餐廳',duration:'55 分鐘',driveTime:'約 5 分鐘',done:false},
+        {id:cid(),time:'15:30',name:'日牟禮八幡宮',note:'',tag:'景點',duration:'60 分鐘',driveTime:'約 40 分鐘',done:false},
         {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'入住琵琶湖畔飯店',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d5: {title:'琵琶湖環湖・親子行程', stops:[
         {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發~',tag:'',duration:'',driveTime:'約 50 分鐘',done:false},
         {id:cid(),time:'09:50',name:'白鬚神社',note:'水上鳥居',tag:'景點',duration:'30 分鐘',driveTime:'約 20 分鐘',done:false},
-        {id:cid(),time:'10:30',name:'メタセコイアと馬の森',note:'🐴 可近距離接觸馬匹',tag:'景點',duration:'120 分鐘',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'12:30',name:'Biwako Valley Ropeway',note:'搭纜車及吊椅~賞高空湖景~順便吃午餐!!',tag:'景點',duration:'150 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'10:30',name:'メタセコイアと馬の森',note:'🐴 可近距離接觸馬匹',tag:'景點',duration:'120 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'12:45',name:'なみ木食堂 ツバメ',note:'午餐。備案：桜町のごはん屋さん ジャッロ・フェリーチェ，或到 Biwako Valley Ropeway 再吃午餐',tag:'餐廳',duration:'60 分鐘',driveTime:'約 20 分鐘',done:false},
+        {id:cid(),time:'14:05',name:'Biwako Valley Ropeway',note:'搭纜車及吊椅~賞高空湖景',tag:'景點',duration:'150 分鐘',driveTime:'約 20 分鐘',done:false},
         {id:cid(),time:'16:30',name:'浮御堂（滿月寺）',note:'可以看夕陽!!!湖中寺廟，攝影勝地',tag:'景點',duration:'45 分鐘',driveTime:'約 25 分鐘',done:false},
         {id:cid(),time:'17:45',name:'PIERI MORIYAMA',note:'湖畔購物中心，稍作休息~順便吃晚餐',tag:'',duration:'150 分鐘',driveTime:'約 10 分鐘',done:false},
         {id:cid(),time:'',name:'琵琶湖萬豪酒店',note:'返回飯店休息',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d6: {title:'比叡山・返回大阪', stops:[
-        {id:cid(),time:'08:30',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',duration:'',driveTime:'約 55 分鐘',done:false},
-        {id:cid(),time:'09:25',name:'舊竹林院',note:'京都大原著名庭園，楓葉知名景點',tag:'景點',duration:'40 分鐘',driveTime:'約 25 分鐘',done:false},
-        {id:cid(),time:'10:30',name:'ケーブル坂本駅（搭纜車）',note:'搭乘坂本纜車上比叡山，日本最長纜車路線，沿途可欣賞琵琶湖景致',tag:'交通',duration:'20 分鐘（購票+候車）',driveTime:'纜車約 11 分鐘',done:false},
-        {id:cid(),time:'11:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓',tag:'景點',duration:'45 分鐘',driveTime:'纜車+開車 約 55 分鐘',done:false},
-        {id:cid(),time:'13:00',name:'近江牛焼肉 咲蔵 大津店',note:'近江牛燒肉午餐，建議先預約',tag:'餐廳',duration:'70 分鐘',driveTime:'約 60 分鐘',done:false},
-        {id:cid(),time:'15:10',name:'還車（Orix 阿倍野店）',note:'這邊彈性時間~看要不要去大阪城或其他地方~車子可提早歸還',tag:'',duration:'20 分鐘',driveTime:'',done:false},
+        {id:cid(),time:'09:00',name:'琵琶湖萬豪酒店',note:'飯店早餐~出發',tag:'',duration:'',driveTime:'約 25 分鐘',done:false},
+        {id:cid(),time:'09:25',name:'舊竹林院',note:'京都大原著名庭園，楓葉知名景點',tag:'景點',duration:'40 分鐘',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'10:15',name:'ケーブル坂本駅（搭纜車）',note:'搭乘坂本纜車上比叡山，日本最長纜車路線，沿途可欣賞琵琶湖景致，來回發車時間(每小時兩班)為00分、30分',tag:'交通',duration:'20 分鐘（購票+候車）',driveTime:'纜車約 11 分鐘',done:false},
+        {id:cid(),time:'11:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓。午餐在「鶴㐂そば 比叡山店（和労堂）」用餐',tag:'景點',duration:'120 分鐘（含午餐）',driveTime:'纜車約11分鐘+ 65分鐘',done:false},
+        {id:cid(),time:'14:00',name:'枚方公園',note:'可視情況安排附近景點（如ひらかたパーク）',tag:'景點',duration:'90 分鐘',driveTime:'約 45 分鐘',done:false},
+        {id:cid(),time:'16:25',name:'還車（Orix 阿倍野店）',note:'預約 可提早歸還',tag:'',duration:'20 分鐘',driveTime:'',done:false},
         {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d7: {title:'返程', stops:[
@@ -984,6 +1002,8 @@ function openGoogleNav(dayId, name){
     '高見峠展望台': '高見峠展望台, Iitakacho Kikaji, Matsusaka, Mie 515-1734',
     '一升びん 宮町店': '一升びん 宮町店',
     'COQUELICOT ROUGE': 'COQUELICOT ROUGE',
+    'オウギヤ': 'オウギヤ 家庭料理 扇屋 三重県',
+    'なみ木食堂 ツバメ': 'なみ木食堂 ツバメ 滋賀県高島市',
     '日牟禮八幡宮': '日牟禮八幡宮前免費停車場, 257 Miyauchicho, Omihachiman, Shiga 523-0828'
   };
   
