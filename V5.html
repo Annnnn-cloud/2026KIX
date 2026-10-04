@@ -592,6 +592,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3;stro
           <div class="parking-title">伊勢神宮 內宮</div>
           <div class="parking-main">官方停車場</div>
           <div class="parking-item">• 伊勢市営 内宮A1･A2駐車場：¥500/最初1小時</div>
+          <div class="parking-item">備用：伊勢市営 内宮A4駐車場(Shrine Kaikan Parking Lot)</div>          
           <div class="parking-item">備用：神宮会館駐車場(Shrine Kaikan Parking Lot)</div>
         </div>
         <div class="parking-section">
@@ -779,12 +780,13 @@ const PARKING_MAP = {
   'プティットフィーユ': 'ケーキ・焼菓子 プティットフィーユ',
   '二見浦夫婦岩': '二見興玉神社駐車場',
   '二見興玉神社': '二見興玉神社駐車場',
-  '伊勢神宮外宮': '外宮駐車場',
-  '伊勢神宮內宮': '内宮前駐車場',
+  '伊勢神宮外宮': '伊勢神宮 外宮第1駐車場',
+  '伊勢神宮內宮': '伊勢市営 内宮A1･A2駐車場',
   '托福橫丁': 'おかげ横丁駐車場',
-  '鳥羽水族館': '鳥羽水族館駐車場',
-  'La Collina Ōmi-Hachiman': 'ラ コリーナ駐車場',
-  '日牟禮八幡宮': 'ラ コリーナ駐車場',
+  '鳥羽水族館': '鳥羽水族館 第一駐車場',
+  '伊勢海洋樂園（9:30營業）': '伊勢夫婦岩めおと横丁 有料駐車場',
+  'birthday津市店': 'ベビー・子供用品バースデイ 津店',
+  'La Collina Ōmi-Hachiman': 'ラコリーナ近江八幡駐車場',
   'メタセコイアと馬の森': '駐車場 (マキノピックランド)',
   'Biwako Valley Ropeway': 'びわ湖バレイ P1 駐車場',
   '白鬚神社': '白鬚神社駐車場',
@@ -861,7 +863,7 @@ function defaultData(){
         {id:cid(),time:'10:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓。回程預計搭11:30的纜車(注意時間)。',tag:'景點',duration:'70 分鐘',driveTime:'纜車約 11 分鐘+步行 15 分鐘',done:false},
         {id:cid(),time:'11:45',name:'ケーブル坂本駅（搭纜車）',note:'',tag:'交通',duration:'5 分鐘',driveTime:'約 25 分鐘',done:false},
         {id:cid(),time:'12:15',name:'マールブランシュ ロマンの森',note:'購買年輪蛋糕、瑪德蓮等伴手禮，森林景觀咖啡廳',tag:'',duration:'45 分鐘',driveTime:'約 60 分鐘',done:false},
-        {id:cid(),time:'14:00',name:'枚方公園',note:'復古遊樂園!!裡面也有賣吃的',tag:'景點',duration:'180 分鐘',driveTime:'約 40 分鐘',done:false},
+        {id:cid(),time:'14:00',name:'枚方公園',note:'復古遊樂園!!裡面也有賣吃的，官方停車場收費是每日¥2000~建議優先看タイムズ伊加賀南町停車場有沒有位置',tag:'景點',duration:'180 分鐘',driveTime:'約 40 分鐘',done:false},
         {id:cid(),time:'17:45',name:'還車（Orix 阿倍野店）',note:'預約20:00還車 可提早歸還(記得先加滿油)',tag:'',duration:'20 分鐘',driveTime:'',done:false},
         {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
