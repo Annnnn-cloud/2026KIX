@@ -118,11 +118,11 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3;stro
 .remind li+li{border-top:1px solid rgba(143,106,14,.2)}
 .remind li b{font-weight:500;color:var(--ink)}
 .gtxt{padding:4px 0 4px 16px;border-left:1px solid var(--goldl);margin-bottom:14px}
-.route{margin:6px 0 0;font-size:13px;line-height:1.85;color:var(--ink)}
-.route .nb{white-space:nowrap}
-.route .ar{margin:0 .3em 0 .45em;color:var(--goldl);font-size:12px}
-.route small{font-size:11.5px;color:var(--soft);letter-spacing:.02em}
-.route small.f{margin-left:.2em}
+.route{list-style:none;margin:8px 0 0;padding:0;counter-reset:r}
+.route li{position:relative;counter-increment:r;padding:5px 0 5px 32px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+.route li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:6px;font:400 15px/1.5 var(--disp);color:var(--gold);letter-spacing:.04em}
+.route small{font-size:12px;color:var(--soft);margin-left:.35em;letter-spacing:.04em}
+.altgo{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;margin-top:10px;border:1px solid #D7DBDB;background:none;color:#838E98;font:500 11.5px var(--sans);letter-spacing:.14em;cursor:pointer}.altgo svg.i{width:13px;height:13px}
 .camlink{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;margin-top:12px;border:1px solid var(--goldl);background:var(--sun);color:var(--ink);font:500 11.5px var(--sans);letter-spacing:.14em;text-decoration:none}.camlink svg.i{width:14px;height:14px}.stop.current .go{background:var(--ink);color:var(--paper)}
 .drive-time-row{display:grid;grid-template-columns:46px 24px 1fr;padding-bottom:26px}
 .drive-badge{grid-column:3;padding-left:12px;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--soft);letter-spacing:.08em}.drive-badge svg.i{width:12px;height:12px}
@@ -592,7 +592,6 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3;stro
           <div class="parking-title">伊勢神宮 內宮</div>
           <div class="parking-main">官方停車場</div>
           <div class="parking-item">• 伊勢市営 内宮A1･A2駐車場：¥500/最初1小時</div>
-          <div class="parking-item">備用：伊勢市営 内宮A4駐車場(Shrine Kaikan Parking Lot)</div>          
           <div class="parking-item">備用：神宮会館駐車場(Shrine Kaikan Parking Lot)</div>
         </div>
         <div class="parking-section">
@@ -780,13 +779,12 @@ const PARKING_MAP = {
   'プティットフィーユ': 'ケーキ・焼菓子 プティットフィーユ',
   '二見浦夫婦岩': '二見興玉神社駐車場',
   '二見興玉神社': '二見興玉神社駐車場',
-  '伊勢神宮外宮': '伊勢神宮 外宮第1駐車場',
-  '伊勢神宮內宮': '伊勢市営 内宮A1･A2駐車場',
+  '伊勢神宮外宮': '外宮駐車場',
+  '伊勢神宮內宮': '内宮前駐車場',
   '托福橫丁': 'おかげ横丁駐車場',
-  '鳥羽水族館': '鳥羽水族館 第一駐車場',
-  '伊勢海洋樂園（9:30營業）': '伊勢夫婦岩めおと横丁 有料駐車場',
-  'birthday津市店': 'ベビー・子供用品バースデイ 津店',
-  'La Collina Ōmi-Hachiman': 'ラコリーナ近江八幡駐車場',
+  '鳥羽水族館': '鳥羽水族館駐車場',
+  'La Collina Ōmi-Hachiman': 'ラ コリーナ駐車場',
+  '日牟禮八幡宮': 'ラ コリーナ駐車場',
   'メタセコイアと馬の森': '駐車場 (マキノピックランド)',
   'Biwako Valley Ropeway': 'びわ湖バレイ P1 駐車場',
   '白鬚神社': '白鬚神社駐車場',
@@ -808,6 +806,7 @@ let currentPolyline = null;
 function defaultData(){
   return {
     version: DATA_VERSION,
+    mig: {gas:true,hira:true},
     days: {
       d1: {title:'抵達關西・入住天王寺', stops:[
         {id:cid(),time:'17:55',name:'關西機場抵達',note:'第一航廈入境，可搭 JR特急HARUKA或 JR關空快速 到天王寺，HARUKA有外國人優惠(可訂電子票掃qrcode，記得先劃位)',tag:'',duration:'45 分鐘（入境通關）',driveTime:'電車約 35~50 分鐘',done:false},
@@ -863,7 +862,8 @@ function defaultData(){
         {id:cid(),time:'10:00',name:'比叡山延曆寺 東塔地區',note:'⭐ 國寶「根本中堂」參拜（本寺核心）、阿彌陀堂、鐘樓。回程預計搭11:30的纜車(注意時間)。',tag:'景點',duration:'70 分鐘',driveTime:'纜車約 11 分鐘+步行 15 分鐘',done:false},
         {id:cid(),time:'11:45',name:'ケーブル坂本駅（搭纜車）',note:'',tag:'交通',duration:'5 分鐘',driveTime:'約 25 分鐘',done:false},
         {id:cid(),time:'12:15',name:'マールブランシュ ロマンの森',note:'購買年輪蛋糕、瑪德蓮等伴手禮，森林景觀咖啡廳',tag:'',duration:'45 分鐘',driveTime:'約 60 分鐘',done:false},
-        {id:cid(),time:'14:00',name:'枚方公園',note:'復古遊樂園!!裡面也有賣吃的，官方停車場收費是每日¥2000~建議優先看タイムズ伊加賀南町停車場有沒有位置',tag:'景點',duration:'180 分鐘',driveTime:'約 40 分鐘',done:false},
+        {id:cid(),time:'14:00',name:'枚方公園',note:'復古遊樂園!!裡面也有賣吃的',tag:'景點',duration:'180 分鐘（玩到 17:00 打烊）',driveTime:'約 40 分鐘',done:false},
+        {id:cid(),time:'',name:'apollostation 下寺町SS',note:'備案：ENEOS 松屋町 SS (松屋町サービスステーション)',tag:'加油',duration:'',driveTime:'',done:false},
         {id:cid(),time:'17:45',name:'還車（Orix 阿倍野店）',note:'預約20:00還車 可提早歸還(記得先加滿油)',tag:'',duration:'20 分鐘',driveTime:'',done:false},
         {id:cid(),time:'',name:'天王寺都城市飯店',note:'入住飯店，隔日HARUKA可先取票',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
@@ -928,18 +928,26 @@ const SHRINE_ROUTES=[
 function routeGuide(s){
   const r=SHRINE_ROUTES.find(x=>x.re.test(s.name)); if(!r) return '';
   const o=openGuides.has(s.id);
-  const li=r.steps.map((p,i)=>{
-    const ar=i<r.steps.length-1?'<span class="ar">→</span>':'';
-    if(!p[1]) return `<span class="nb">${p[0]}${ar}</span>`;
-    const g=p[1].split('，'), end=j=>j<g.length-1?'，':'）'+ar;
-    return `<span class="nb">${p[0]}<small class="f">（${g[0]}${end(0)}</small></span>`+g.slice(1).map((x,k)=>`<span class="nb"><small>${x}${end(k+1)}</small></span>`).join('');
-  }).join(' ');
-  return `<div><button class="guidebtn${o?' open':''}" data-act="guide" aria-expanded="${o}">參拜推薦動線${ic('chev')}</button><div class="guide-body media"${o?'':' hidden'}><div class="gtxt"><div class="gt">參拜推薦動線</div><div class="route">${li}</div></div><a class="gimg" href="${r.img}" target="_blank" rel="noopener"><img src="${r.img}" alt="${r.alt}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false;this.parentElement.nextElementSibling.nextElementSibling.hidden=true"></a><div class="gfail" hidden>圖片無法載入，<a href="${r.img}" target="_blank" rel="noopener">點此開啟原圖</a></div><div class="gcap">點擊圖片可開啟原圖放大</div></div></div>`;
+  const li=r.steps.map(p=>`<li>${p[0]}${p[1]?`<small>（${p[1]}）</small>`:''}</li>`).join('');
+  return `<div><button class="guidebtn${o?' open':''}" data-act="guide" aria-expanded="${o}">參拜推薦動線${ic('chev')}</button><div class="guide-body media"${o?'':' hidden'}><div class="gtxt"><div class="gt">參拜推薦動線</div><ol class="route">${li}</ol></div><a class="gimg" href="${r.img}" target="_blank" rel="noopener"><img src="${r.img}" alt="${r.alt}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false;this.parentElement.nextElementSibling.nextElementSibling.hidden=true"></a><div class="gfail" hidden>圖片無法載入，<a href="${r.img}" target="_blank" rel="noopener">點此開啟原圖</a></div><div class="gcap">點擊圖片可開啟原圖放大</div></div></div>`;
 }
 const ROPEWAY_FOG='起霧備案：三千院或琵琶湖博物館';
 const ROPEWAY_CAM='https://www.biwako-valley.com/w_season/livecamera';
 function migrateSaved(){
-  const d=state&&state.days&&state.days.d5; if(!d) return;
+  const d6=state&&state.days&&state.days.d6;
+  if(d6 && !(state.mig&&state.mig.gas)){
+    if(!d6.stops.some(x=>GAS_RE.test(x.name||''))){
+      const gas={id:cid(),time:'',name:'apollostation 下寺町SS',note:'備案：ENEOS 松屋町 SS (松屋町サービスステーション)',tag:'加油',duration:'',driveTime:'',done:false};
+      const at=d6.stops.findIndex(x=>/還車/.test(x.name||''));
+      at>=0 ? d6.stops.splice(at,0,gas) : d6.stops.push(gas);
+    }
+    state.mig=Object.assign({},state.mig,{gas:true});
+  }
+  if(d6 && !(state.mig&&state.mig.hira)){
+    d6.stops.forEach(x=>{ if(x.name==='枚方公園' && x.duration==='180 分鐘') x.duration='180 分鐘（玩到 17:00 打烊）'; });
+    state.mig=Object.assign({},state.mig,{hira:true});
+  }
+  const d=state&&state.days&&state.days.d5; if(!d){ saveToLocal(); return; }
   d.stops.forEach(s=>{ if(/Biwako Valley Ropeway/.test(s.name||'') && !(s.note||'').includes('起霧備案')){ s.note=(s.note?s.note.replace(/[。\s]+$/,'')+'。':'')+ROPEWAY_FOG; } });
   saveToLocal();
 }
@@ -996,6 +1004,13 @@ function fmtDate(dateStr){
   return `${parseInt(m)}/${parseInt(d)}`;
 }
 
+const GAS_RE=/apollostation/i;
+const GAS_ALT_NAV='ENEOS 松屋町 SS (松屋町サービスステーション) 大阪府大阪市天王寺区下寺町2-1-28';
+const ALT_NAVS=[
+  {re:GAS_RE,q:GAS_ALT_NAV},
+  {re:/千寿亭/,q:'三輪素麵 やまなか, 奈良縣櫻井市牧內537-1'}
+];
+const altNavFor=n=>(ALT_NAVS.find(a=>a.re.test(n||''))||{}).q;
 function openGoogleNav(dayId, name){
   // Special navigation targets for specific locations
   const navTargets = {
@@ -1010,7 +1025,8 @@ function openGoogleNav(dayId, name){
     'オウギヤ': 'オウギヤ 家庭料理 扇屋 三重県',
     'なみ木食堂 ツバメ': 'なみ木食堂 ツバメ 滋賀県高島市',
     'マールブランシュ ロマンの森': 'マールブランシュ ロマンの森 大津',
-    '日牟禮八幡宮': '日牟禮八幡宮前免費停車場, 257 Miyauchicho, Omihachiman, Shiga 523-0828'
+    '日牟禮八幡宮': '日牟禮八幡宮前免費停車場, 257 Miyauchicho, Omihachiman, Shiga 523-0828',
+    'apollostation 下寺町SS': 'apollostation 下寺町SS 大阪府大阪市浪速区下寺1-3-1'
   };
   
   // Locations that don't need parking navigation
@@ -1091,7 +1107,7 @@ function renderDay(){
   tl.innerHTML=st.map((s,i)=>{
     const last=i===st.length-1, ed=editingId===s.id, dr=!last&&s.driveTime;
     const rm=SHRINE_REMIND_RE.test(s.name);
-    return `<div class="stop-wrapper${last?' last':''}${dr?' hasdrive':''}${rm?' has-remind':''}">${rm?shrineReminder():''}<div class="stop draggable-stop${s.done?' done':''}${i===ni?' current':''}" data-id="${s.id}" draggable="true"><div class="timecol">${s.time?`<span class="time">${escapeHtml(s.time)}</span>`:''}</div><div class="railcol"><div class="node">${s.done?ic('check'):''}</div></div><div class="card">${ed?renderEditBox(s):`${(s.tag||i===ni)?`<div class="tagrow">${s.tag?`<span class="tag">${escapeHtml(plain(s.tag))}</span>`:''}${i===ni?'<span class="curtag">NEXT</span>':''}</div>`:''}<div class="name">${escapeHtml(plain(s.name))||'（未命名地點）'}</div>${s.note?`<div class="note">${escapeHtml(plain(s.note))}</div>`:''}${s.duration?`<span class="stay-badge">停留約 ${escapeHtml(s.duration)}</span>`:''}${/Biwako Valley Ropeway/.test(s.name)?`<div><a class="camlink" href="${ROPEWAY_CAM}" target="_blank" rel="noopener">${ic('cam')}即時攝影機</a></div>`:''}${HOTEL_GUIDE_RE.test(s.name)?hotelGuide(s):''}${PARKING_IMG_RE.test(s.name)?parkingMap(s):''}${routeGuide(s)}<div class="card-bottom"><div class="check" data-act="toggle">${s.done?ic('check')+'已完成':'完成'}</div><div class="iconbtn" data-act="edit" title="編輯">${ic('edit')}</div><div class="iconbtn" data-act="del" title="刪除">${ic('x')}</div><div class="go" data-act="nav" title="Google Map 導航">GO${ic('go')}</div></div>`}</div></div>${dr?`<div class="drive-time-row"><div class="drive-badge">${ic('down')}${escapeHtml(plain(s.driveTime))}</div></div>`:''}</div>`;
+    return `<div class="stop-wrapper${last?' last':''}${dr?' hasdrive':''}${rm?' has-remind':''}">${rm?shrineReminder():''}<div class="stop draggable-stop${s.done?' done':''}${i===ni?' current':''}" data-id="${s.id}" draggable="true"><div class="timecol">${s.time?`<span class="time">${escapeHtml(s.time)}</span>`:''}</div><div class="railcol"><div class="node">${s.done?ic('check'):''}</div></div><div class="card">${ed?renderEditBox(s):`${(s.tag||i===ni)?`<div class="tagrow">${s.tag?`<span class="tag">${escapeHtml(plain(s.tag))}</span>`:''}${i===ni?'<span class="curtag">NEXT</span>':''}</div>`:''}<div class="name">${escapeHtml(plain(s.name))||'（未命名地點）'}</div>${s.note?`<div class="note">${escapeHtml(plain(s.note))}</div>`:''}${altNavFor(s.name)?`<div><button class="altgo" data-act="altnav">導航至備案${ic('go')}</button></div>`:''}${s.duration?`<span class="stay-badge">停留約 ${escapeHtml(s.duration)}</span>`:''}${/Biwako Valley Ropeway/.test(s.name)?`<div><a class="camlink" href="${ROPEWAY_CAM}" target="_blank" rel="noopener">${ic('cam')}即時攝影機</a></div>`:''}${HOTEL_GUIDE_RE.test(s.name)?hotelGuide(s):''}${PARKING_IMG_RE.test(s.name)?parkingMap(s):''}${routeGuide(s)}<div class="card-bottom"><div class="check" data-act="toggle">${s.done?ic('check')+'已完成':'完成'}</div><div class="iconbtn" data-act="edit" title="編輯">${ic('edit')}</div><div class="iconbtn" data-act="del" title="刪除">${ic('x')}</div><div class="go" data-act="nav" title="Google Map 導航">GO${ic('go')}</div></div>`}</div></div>${dr?`<div class="drive-time-row"><div class="drive-badge">${ic('down')}${escapeHtml(plain(s.driveTime))}</div></div>`:''}</div>`;
   }).join('');
 
   tl.querySelectorAll('.stop').forEach(el=>{
@@ -1110,6 +1126,8 @@ function renderDay(){
       guideBtn.setAttribute('aria-expanded', o);
       el.querySelector('.guide-body').hidden = !o;
     };
+    const altBtn = el.querySelector('[data-act="altnav"]');
+    if(altBtn) altBtn.onclick = ()=> window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(altNavFor(stop.name)),'_blank');
     if(navBtn) navBtn.onclick = ()=> openGoogleNav(selectedDay, stop.name);
     if(toggleBtn) toggleBtn.onclick = ()=>{ stop.done = !stop.done; saveToLocal(); render(); initDayMap(); };
     if(editBtn) editBtn.onclick = ()=>{ editingId = id; render(); focusEditName(); };
