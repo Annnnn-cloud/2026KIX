@@ -286,11 +286,12 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3;stro
           </div>
         </div>
         <div class="attraction-item">
-          <div class="attraction-name">一升びん 宮町店</div>
+          <div class="attraction-name">一升びん 松寿亭</div>
           <div class="attraction-details">
-            <div>有分一般席及迴轉席</div>
-            <div><span class="k">時間</span>11:00–15:00, 16:30–21:30(（平日回転席17:00～)</div>
-            <div><span class="k">費用</span>松阪牛燒肉¥3,000-5,000/人 兒童可點兒童燒肉</div>
+            <div>位於伊勢市，座席有座敷、包廂（約100席），親子可</div>
+            <div><span class="k">時間</span>平日 16:30–21:30（L.O.21:00）；土日祝 11:30–21:30（中間休息）；<span class="k">公休</span>週二（10/29 週四有營業）</div>
+            <div><span class="k">費用</span>松阪牛燒肉約¥3,000-6,000/人（A5松阪牛特選套餐約¥5,980）</div>
+            <div><span class="k">電話</span>0596-27-8929（建議先電話預約）</div>
           </div>
         </div>
       </div>
@@ -614,10 +615,10 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3;stro
           <div class="parking-item">備用：多武峰第二～第四停車場 無料</div>
         </div>
         <div class="parking-section">
-          <div class="parking-title">一升びん 宮町店</div>
+          <div class="parking-title">一升びん 松寿亭</div>
           <div class="parking-main">店家停車場</div>
-          <div class="parking-item">• 店家免費停車場：約50台（就在店家旁邊大空地）</div>
-          <div class="parking-item"><strong>停車場滿了表示客人太多！不如吃別的</strong></div>
+          <div class="parking-item">• 店家專用免費停車場（各資料來源標示約 20～50 台，以現場為準）</div>
+          <div class="parking-item">• 位置：國道23號「長屋1」路口往西約 300m</div>
         </div>
       </div>
 
@@ -783,7 +784,7 @@ const LOCATION_COORDS = {
   'プティットフィーユ': [34.4234, 135.9947],
   '高見峠展望台': [34.4114, 136.1088],
   '道の駅 飯高駅': [34.4080, 136.1660],
-  '一升びん 宮町店': [34.5772, 136.5433],
+  '一升びん 松寿亭': [34.5028, 136.7076],
   'Hotel Castle Inn Ise Meotoiwa': [34.5082, 136.7813],
   '二見浦夫婦岩': [34.5085, 136.7884],
   '二見興玉神社': [34.5082, 136.7876],
@@ -854,10 +855,10 @@ let currentPolyline = null;
 function defaultData(){
   return {
     version: DATA_VERSION,
-    mig: {gas:true,hira:true},
+    mig: {gas:true,hira:true,iss:true},
     days: {
       d1: {title:'抵達關西・入住天王寺', stops:[
-        {id:cid(),time:'17:55',name:'關西機場抵達',note:'第一航廈入境，可搭「JR特急HARUKA」或「JR關空快速」到天王寺，HARUKA有外國人優惠(可訂電子票掃qrcode，記得先劃位)',tag:'',duration:'45 分鐘（入境通關）',driveTime:'電車約 35~50 分鐘',done:false},
+        {id:cid(),time:'17:55',name:'關西機場抵達',note:'第一航廈入境，可搭 JR特急HARUKA或 JR關空快速 到天王寺，HARUKA有外國人優惠(可訂電子票掃qrcode，記得先劃位)',tag:'',duration:'45 分鐘（入境通關）',driveTime:'電車約 35~50 分鐘',done:false},
         {id:cid(),time:'19:45',name:'龜王拉麵 天王寺店',note:'先去飯店checkin(就在對面)，再出來吃晚餐，也可以趁打烊前先逛 Q\'s Mall',tag:'餐廳',duration:'60 分鐘',driveTime:'步行 5 分鐘',done:false},
         {id:cid(),time:'',name:'Hotel Trusty 大阪阿倍野',note:'入住',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
@@ -869,10 +870,10 @@ function defaultData(){
         {id:cid(),time:'13:00',name:'奈良談山神社',note:'',tag:'景點',duration:'75 分鐘',driveTime:'約 25 分鐘',done:false},
         {id:cid(),time:'14:40',name:'プティットフィーユ',note:'買點心',tag:'',duration:'15 分鐘',driveTime:'約 15 分鐘',done:false},
         {id:cid(),time:'15:10',name:'高見峠展望台',note:'山路休息點',tag:'',duration:'15 分鐘',driveTime:'約 35 分鐘',done:false},
-        {id:cid(),time:'16:00',name:'道の駅 飯高駅',note:'下車休息走走，外帶 BOUQUET IITAKA 生甜甜圈',tag:'',duration:'20 分鐘',driveTime:'約 50 分鐘',done:false},
-        {id:cid(),time:'17:15',name:'一升びん 宮町店',note:'松阪牛燒肉',tag:'餐廳',duration:'90 分鐘',driveTime:'約 45 分鐘',done:false},
-        {id:cid(),time:'19:30',name:'Price Cut Ise-Futami store',note:'買明天早餐食材',tag:'',duration:'30 分鐘',driveTime:'約 10 分鐘',done:false},
-        {id:cid(),time:'20:10',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住首夜），辦理入住手續時可預約免費的貸切風呂(私人湯屋)~不過我們比較晚到,如果預約滿了~看能不能約隔天晚上的?',tag:'住宿',duration:'',driveTime:'',done:false},
+        {id:cid(),time:'16:00',name:'道の駅 飯高駅',note:'下車休息走走，外帶 BOUQUET IITAKA 生甜甜圈',tag:'',duration:'20 分鐘',driveTime:'約 75 分鐘',done:false},
+        {id:cid(),time:'17:35',name:'一升びん 松寿亭',note:'松阪牛燒肉（伊勢市）。平日 16:30 開店，建議先電話預約 0596-27-8929',tag:'餐廳',duration:'90 分鐘',driveTime:'約 15 分鐘',done:false},
+        {id:cid(),time:'19:20',name:'Price Cut Ise-Futami store',note:'買明天早餐食材',tag:'',duration:'30 分鐘',driveTime:'約 10 分鐘',done:false},
+        {id:cid(),time:'20:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'入住（連住首夜），辦理入住手續時可預約免費的貸切風呂(私人湯屋)~不過我們比較晚到,如果預約滿了~看能不能約隔天晚上的?',tag:'住宿',duration:'',driveTime:'',done:false},
       ]},
       d3: {title:'伊勢・日出・鳥羽', stops:[
         {id:cid(),time:'06:00',name:'Hotel Castle Inn Ise Meotoiwa',note:'自備早餐出發 (日出時間約06:00-06:30)',tag:'',duration:'',driveTime:'步行 5 分鐘',done:false},
@@ -997,6 +998,16 @@ function loadCam(){
 }
 function openCam(){ document.getElementById('camModal').style.display='flex'; loadCam(); }
 function migrateSaved(){
+  if(state && state.days && state.days.d2 && !(state.mig&&state.mig.iss)){
+    const st=state.days.d2.stops, i=st.findIndex(x=>x.name==='一升びん 宮町店');
+    if(i>=0){
+      Object.assign(st[i],{time:'17:35',name:'一升びん 松寿亭',note:'松阪牛燒肉（伊勢市）。平日 16:30 開店，建議先電話預約 0596-27-8929',driveTime:'約 15 分鐘'});
+      if(i>0 && /飯高/.test(st[i-1].name||'') && st[i-1].driveTime==='約 50 分鐘') st[i-1].driveTime='約 75 分鐘';
+      const nx=st[i+1]; if(nx && /Price Cut/.test(nx.name||'') && nx.time==='19:30') nx.time='19:20';
+      const hn=st[i+2]; if(hn && /Hotel Castle Inn/.test(hn.name||'') && hn.time==='20:10') hn.time='20:00';
+    }
+    state.mig=Object.assign({},state.mig,{iss:true});
+  }
   const d6=state&&state.days&&state.days.d6;
   if(d6 && !(state.mig&&state.mig.gas)){
     if(!d6.stops.some(x=>GAS_RE.test(x.name||''))){
@@ -1086,7 +1097,7 @@ function openGoogleNav(dayId, name){
     '三輪素麵 やまなか': '三輪素麵 やまなか, 奈良縣櫻井市牧內537-1',
     '千寿亭': '千寿亭 奈良県桜井市三輪',
     '高見峠展望台': '高見峠展望台, Iitakacho Kikaji, Matsusaka, Mie 515-1734',
-    '一升びん 宮町店': '一升びん 宮町店',
+    '一升びん 松寿亭': '一升びん 松寿亭 三重県伊勢市一之木5-13-20',
     'COQUELICOT ROUGE': 'COQUELICOT ROUGE',
     'オウギヤ': 'オウギヤ 家庭料理 扇屋 三重県',
     'なみ木食堂 ツバメ': 'なみ木食堂 ツバメ 滋賀県高島市',
